@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+  <head>
+    <title>AppMaker</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+      var iFrame;
+      var currentScreenshot = 1;
+
+      $( document ).ready(function() {
+
+        $('.buildAndPreview').on('click', function(){
+          var iFrameSrc = '<iframe src="https://appetize.io/embed/1uz3y4q5uru5vw5hwp0hj4q5kw?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
+
+            iFrame = $(iFrameSrc);
+            $('#previewArea').empty();
+            $('#previewArea').append(iFrame);
+        });
+
+        $('#takeScreenshot').bind('click', function(){
+          var ifr = document.querySelector('iframe');
+          ifr.contentWindow.postMessage('getScreenshot', '*');
+        });
+        
+        var saveScreenshot = function (){
+          var ifr = document.querySelector('iframe');
+        }
+
+        // Receiving messages from iframe in parent window
+        var messageEventHandler = function(event){
+    
+          if(event.data == 'sessionRequested'){
+              console.log(event.data);
+          }
+          
+          else if(event.data == 'userError'){
+              console.log(event.data);
+          }
+          
+          else if(event.data == 'sessionQueued'){
+              console.log(event.data);
+          }
+          
+          else if(event.data == 'appLaunch'){
+              console.log(event.data);
+          }
+          
+          else if(event.data == 'firstFrameReceived'){
+              console.log(event.data);
+            $('#takeScreenshot').show();
+          }
+          
+          else if(event.data == 'timeoutWarning'){
+              console.log(event.data);
+          }
+          
+          else if(event.data == 'sessionEnded'){
+              console.log(event.data);
+          }
+          
+          else if(event.data && event.data.type == 'screenshot'){
+              console.log(event.data);
+              document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
+
+              currentScreenshot++;
+              if (currentScreenshot > 4)
+                currentScreenshot = 1;
+          }
+        };
+        window.addEventListener('message', messageEventHandler, false);
+
+        $('#takeScreenshot').hide();
+ 
+        $.ajax('http://127.0.0.1:1234/schemes', {
+          success: function(result){
+            $.each(result, function(i, v){
+              $('#schemes').append($('<tr><td>' + v + '</td><td><button type="button" class="btn btn-primary buildAndPreview" data="' + v +'">Build & Preview</button></td></tr>'));
+            });
+          },
+          error: function(e){
+            alert(e);
+          }
+        });
+      });
+    </script>
+</head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-8">
+          <button type="button" class="btn btn-primary" id="takeScreenshot">Take Screenshot</button>
+          <hr />
+          <table class="table table-condensed" id='schemes'>
+            
+          </table>
+          <div class="row">
+            <div class="col-md-3 col-sm-2 ">
+              <img id='screenshot1' style="max-width:100%;" />
+            </div>
+            <div class="col-md-3 col-sm-2">
+              <img id='screenshot2' style="max-width:100%;"  />
+            </div>
+            <div class="col-md-3 col-sm-2">
+              <img id='screenshot3' style="max-width:100%;"  />
+            </div>
+            <div class="col-md-3 col-sm-2">
+              <img id='screenshot4' style="max-width:100%;"  />
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-6 col-md-4" id='previewArea'>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

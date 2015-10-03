@@ -1,0 +1,14 @@
+{
+  "global": {
+    "parseVersion": "latest"
+  },
+  "applications": {
+    "AppMaker": {
+      "applicationId": "svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi",
+      "masterKey": "ummFZFTx6B1w93KsPe2tGy5gjkMlTYxK0QIUiybA"
+    },
+    "_default": {
+      "link": "AppMaker"
+    }
+  }
+}
