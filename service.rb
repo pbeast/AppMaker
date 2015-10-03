@@ -4,8 +4,15 @@ require 'securerandom'
 require 'fileutils'
 require 'net/http'
 require "uri"
+require 'colorize'
 
 set :port, 1234
+
+$stdout.sync = true
+
+workspace = "/Volumes/Macintosh\ HD\ 2/Work/Rashim/Rashim.xcworkspace"
+#previews = "/Volumes/Macintosh\ HD/Users/pbeast/Tmp/Previews/"
+
 
 def camel_case(str)
   words = str.downcase.split
@@ -20,62 +27,90 @@ get '/' do
     'Welcome to app maker service'
 end
 
+
+def upload(scheme)
+  url = "http://4df57fac.ngrok.io/#{scheme}/Build/Products/Release-iphonesimulator/#{scheme}.zip"
+
+  uri = URI('https://api.appetize.io/v1/app/update')
+  req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
+
+  body = { :token => 'tok_p5451b2aep2cpzjnj1rdt647pg', :url => url, :platform => 'ios' }.to_json
+  req.body = body
+
+  response = Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.ssl_version = :SSLv3
+    http.request req
+  end
+
+  if response.code=='200' then
+    json = JSON.parse response.body
+
+    JSON.pretty_generate(json)
+  else
+    puts '-----------------------------------------------------------------'
+    puts "Response #{response.code} #{response.message}:#{response.body}".red
+    puts '-----------------------------------------------------------------'
+
+    500
+  end
+end
+
 get '/upload/:scheme' do
   scheme = params['scheme']
-  url = "http://775235af.ngrok.io/#{scheme}/Build/Products/Release-iphonesimulator/#{scheme}.zip"
 
-  uri = URI.parse("https://api.appetize.io")
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = true
-  request = Net::HTTP::Post.new('/v1/app/update')
-  #request.set_form_data({ "token" => "tok_p5451b2aep2cpzjnj1rdt647pg", "url" => url, "platform" => "ios" })
-  request.body = { 'token' => 'tok_p5451b2aep2cpzjnj1rdt647pg', 'url' => url, 'platform' => 'ios' }.to_json
-  response = http.request(request)
-
-  #req = Net::HTTP::Post.new('/v1/app/update', initheader = {'Content-Type' =>'application/json'})
-  #req.body = { "token" => "tok_p5451b2aep2cpzjnj1rdt647pg", "url" => url, "platform" => "ios" }.to_json
-  #response = Net::HTTP.new('https://api.appetize.io', '443').start {|http| http.request(req) }
-  puts '-----------------------------------------------------------------'
-  puts "Response #{response.code} #{response.message}:#{response.body}"
-  puts '-----------------------------------------------------------------'
+  upload (scheme)
 end
 
 get '/build/:scheme' do
   scheme = params['scheme']
-  tempFolder = "/Volumes/Macintosh\ HD/Users/pavelyankelevich/Tmp/Previews/#{scheme}"
-  FileUtils::mkdir_p '"' + tempFolder + '"' 
+  curDir = Dir.pwd
+  tempFolder = File.join(Dir.pwd, "Previews", scheme)
 
-  cmd = "xcodebuild -sdk iphonesimulator9.0 -workspace '/Volumes/Macintosh\ HD/Users/pavelyankelevich/Work/Rashim/Rashim.xcworkspace' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}'"
-#  puts system cmd
+  FileUtils::mkdir_p tempFolder
+
+  print 'Building...'.green
+  cmd = `xcodebuild -sdk iphonesimulator -workspace '#{workspace}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}' > /dev/null 2>&1`
+  #system cmd
 
   result = $?.to_i
 #  puts result
 
   if result==0 then
+    puts "Done".green
+
     tempFolder += '/Build/Products/Release-iphonesimulator'
 
-    cmd = "cd '#{tempFolder}' && zip -r -X '#{scheme}.zip' '#{scheme}.app'"
-    puts cmd
-    puts system cmd
+    print 'Making zip...'.green
+    cmd = `cd '#{tempFolder}' && zip -r -X '#{scheme}.zip' '#{scheme}.app'`
+    #puts cmd
+    #puts system cmd
 
-    postData = Net::HTTP.post_form(URI.parse('https://api.appetize.io/v1/app/update'), { "token" => "tok_p5451b2aep2cpzjnj1rdt647pg", "url" => "http://www.example.com/my_app.zip", "platform" => "ios" })
+    if result==0 then
+      puts "Done".green
 
-    puts postData.body
+      print 'Uploading for preview...'.green
+      upload(scheme)
+    else
+      puts "Failed".red
+      500
+    end
   else
-    puts 'Build failed'
+    puts 'Failed'.red
     500
   end
 end
 
 get '/clean/:scheme' do
   scheme = params['scheme']
-  output = `xcodebuild  -workspace '/Volumes/Macintosh\ HD/Users/pavelyankelevich/Work/Rashim/Rashim.xcworkspace' -scheme '#{scheme}' clean`
+
+  output = `xcodebuild  -workspace "#{workspace}" -scheme '#{scheme}' clean`
   puts output
 end
 
 get '/schemes' do
   schemesPattern = "Schemes:"
-  output = `xcodebuild -workspace '/Volumes/Macintosh\ HD/Users/pavelyankelevich/Work/Rashim/Rashim.xcworkspace' -list`
+  output = `xcodebuild -workspace '#{workspace}' -list`
   index = output.index(schemesPattern)
   if !index.nil?
     headers \

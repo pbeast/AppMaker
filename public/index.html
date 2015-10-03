@@ -18,15 +18,34 @@
       var iFrame;
       var currentScreenshot = 1;
 
-      $( document ).ready(function() {
+      function fixedEncodeURIComponent (str) {
+        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+          return '%' + c.charCodeAt(0).toString(16);
+        });
+      }
 
-        $('.buildAndPreview').on('click', function(){
-          var iFrameSrc = '<iframe src="https://appetize.io/embed/1uz3y4q5uru5vw5hwp0hj4q5kw?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
+      var previewBuild = function(){
+
+        var scheme = $(this).attr("data");
+
+        $.ajax('http://127.0.0.1:1234/build/'+fixedEncodeURIComponent(scheme), {
+          timeout: 60*1000*3,
+          success: function(result){
+            var obj = jQuery.parseJSON(result);
+            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + obj.publicKey + '?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
 
             iFrame = $(iFrameSrc);
             $('#previewArea').empty();
             $('#previewArea').append(iFrame);
+          },
+          error: function(e){
+            alert('Error:' + e.statusText);
+          }
         });
+      }
+
+
+      $( document ).ready(function() {
 
         $('#takeScreenshot').bind('click', function(){
           var ifr = document.querySelector('iframe');
@@ -87,9 +106,12 @@
             $.each(result, function(i, v){
               $('#schemes').append($('<tr><td>' + v + '</td><td><button type="button" class="btn btn-primary buildAndPreview" data="' + v +'">Build & Preview</button></td></tr>'));
             });
+
+            $('.buildAndPreview').on('click', previewBuild);
+
           },
           error: function(e){
-            alert(e);
+            alert('Error:' + e);
           }
         });
       });
