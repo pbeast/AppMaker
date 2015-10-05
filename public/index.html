@@ -29,6 +29,12 @@
 
         var scheme = $(this).attr("data");
 
+        $('#takeScreenshot').hide();
+        $('#previewArea').empty();
+        $('#previewArea').append('<div class="alert alert-success" role="alert">It takes some time, so meanwhile watch some...</div>');
+        $('#previewArea').append('<iframe src="http://giphy.com/embed/oDDEfZkth8Xe0?html5=true" width="480" height="319" frameborder="0" class="giphy-embed" allowfullscreen=""></iframe>');
+
+
         $.ajax('http://127.0.0.1:1234/build/'+fixedEncodeURIComponent(scheme), {
           timeout: 60*1000*3,
           success: function(result){
@@ -40,7 +46,11 @@
             $('#previewArea').append(iFrame);
           },
           error: function(e){
-            alert('Error:' + e.statusText);
+            $('#previewArea').empty();
+            $('#previewArea').append('<div class="alert alert-danger" role="alert">Oh shit...' + e.statusText + '</div>');
+            $('#previewArea').append('<iframe src="http://giphy.com/embed/33iqmp5ATXT5m?html5=true" width="480" height="204" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/sad-depressed-disappointed-33iqmp5ATXT5m">via GIPHY</a></p>');
+
+            
           }
         });
       }

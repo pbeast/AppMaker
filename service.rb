@@ -11,9 +11,9 @@ set :port, 1234
 $stdout.sync = true
 
 workspace = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
-
-#previews = "/Volumes/Macintosh\ HD/Users/pbeast/Tmp/Previews/"
-
+previewsLocation = 'http://3c96f00b.ngrok.io'
+appetizeApiToken = 'tok_p5451b2aep2cpzjnj1rdt647pg'
+workFolder = File::expand_path("~/Work/AppMaker")
 
 def camel_case(str)
   words = str.downcase.split
@@ -29,13 +29,13 @@ get '/' do
 end
 
 
-def upload(scheme)
-  url = "http://4df57fac.ngrok.io/#{scheme}/Build/Products/Release-iphonesimulator/#{scheme}.zip"
+def upload(scheme, previewsLocation, appetizeApiToken)
+  url = "#{previewsLocation}/#{scheme}/Build/Products/Release-iphonesimulator/#{scheme}.zip"
 
   uri = URI('https://api.appetize.io/v1/app/update')
   req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
 
-  body = { :token => 'tok_p5451b2aep2cpzjnj1rdt647pg', :url => url, :platform => 'ios' }.to_json
+  body = { :token => appetizeApiToken, :url => url, :platform => 'ios' }.to_json
   req.body = body
 
   response = Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
@@ -49,6 +49,7 @@ def upload(scheme)
 
     JSON.pretty_generate(json)
   else
+    puts ''
     puts '-----------------------------------------------------------------'
     puts "Response #{response.code} #{response.message}:#{response.body}".red
     puts '-----------------------------------------------------------------'
@@ -66,13 +67,13 @@ end
 get '/build/:scheme' do
   scheme = params['scheme']
   curDir = Dir.pwd
-  tempFolder = File.join(Dir.pwd, "Previews", scheme)
+  tempFolder = File.join(workFolder, "Previews", scheme)
 
   FileUtils::mkdir_p tempFolder
 
   print 'Building...'.green
-  cmd = `xcodebuild -sdk iphonesimulator -workspace '#{workspace}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}' > /dev/null 2>&1`
-  #system cmd
+  output = `xcodebuild -sdk iphonesimulator -workspace '#{workspace}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}'` # > /dev/null 2>&1
+  #puts output
 
   result = $?.to_i
 #  puts result
@@ -91,13 +92,14 @@ get '/build/:scheme' do
       puts "Done".green
 
       print 'Uploading for preview...'.green
-      upload(scheme)
+      upload(scheme, previewsLocation, appetizeApiToken)
     else
       puts "Failed".red
       500
     end
   else
     puts 'Failed'.red
+    puts output
     500
   end
 end
