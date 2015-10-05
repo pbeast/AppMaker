@@ -17,6 +17,7 @@
 
       var iFrame;
       var currentScreenshot = 1;
+      var ws;
 
       function fixedEncodeURIComponent (str) {
         return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
@@ -44,10 +45,31 @@
         });
       }
 
+      function debug(str){ $("#debug").append("<p>"+str+"</p>"); };
+
 
       $( document ).ready(function() {
 
+/*
+        ws = new WebSocket("ws://127.0.0.1:9090/websocket");
+        ws.onmessage = function(evt) { 
+          debug("&lt;&lt;&lt; " + evt.data); 
+        };
+        ws.onclose = function() { debug("socket closed"); };
+        ws.onopen = function() {
+          debug("connected...");
+        };
+*/
+
         $('#takeScreenshot').bind('click', function(){
+/*
+          if (ws != undefined){
+            debug("&gt;&gt;&gt; hello server");
+            ws.send("hello server");
+          }
+
+        return;
+*/
           var ifr = document.querySelector('iframe');
           ifr.contentWindow.postMessage('getScreenshot', '*');
         });
@@ -118,6 +140,9 @@
     </script>
 </head>
   <body>
+    <div id="debug"></div>
+    <div id="msg"></div>
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-8">

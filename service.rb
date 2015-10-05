@@ -10,7 +10,8 @@ set :port, 1234
 
 $stdout.sync = true
 
-workspace = "/Volumes/Macintosh\ HD\ 2/Work/Rashim/Rashim.xcworkspace"
+workspace = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
+
 #previews = "/Volumes/Macintosh\ HD/Users/pbeast/Tmp/Previews/"
 
 
