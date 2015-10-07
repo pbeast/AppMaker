@@ -11,7 +11,7 @@ set :port, 1234
 $stdout.sync = true
 
 workspace = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
-previewsLocation = 'http://3c96f00b.ngrok.io'
+previewsLocation = 'http://cc673dd2.ngrok.io'
 appetizeApiToken = 'tok_p5451b2aep2cpzjnj1rdt647pg'
 workFolder = File::expand_path("~/Work/AppMaker")
 
