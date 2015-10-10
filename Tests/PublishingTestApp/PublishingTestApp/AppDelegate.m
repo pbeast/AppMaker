@@ -8,6 +8,10 @@
 
 #import "AppDelegate.h"
 
+#ifdef DEBUG
+    #import "SDStatusBarManager.h"
+#endif
+
 @interface AppDelegate ()
 
 @end
@@ -17,6 +21,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+#ifdef DEBUG
+    [[SDStatusBarManager sharedInstance] enableOverrides];
+#endif
+    
     return YES;
 }
 
