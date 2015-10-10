@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << '.'
+
 require 'spaceship'
+
+require 'config'
 
 if ARGV[0].nil?
   puts 'Please provide Application Bundle Id'
@@ -9,7 +13,7 @@ end
 
 app_id = ARGV[0]
 
-client = Spaceship.login('', '')
+client = Spaceship.login(AppMakerConfig::DEV_USER, AppMakerConfig::DEV_PASSWORD)
 
 puts "Logged in"
 

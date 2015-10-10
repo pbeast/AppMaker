@@ -1,5 +1,12 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << '.'
+
+require 'fastlane_core'
+require 'spaceship'
+require 'colorize'
+
+require 'config'
 
 =begin
 	
@@ -7,11 +14,6 @@ xcodebuild -workspace PublishingTestApp.xcworkspace -scheme PublishingTestApp PR
 xcodebuild -exportArchive -archivePath ~/Tmp/Previews/PublishingTestApp.xcarchive -exportPath ~/Tmp/Previews/PublishingTestApp -exportOptionsPlist ~/Work/AppMaker/exportPList.plist
 
 =
-
-
-require 'fastlane_core'
-require 'spaceship'
-require 'colorize'
 
 =begin
 package_path = FastlaneCore::IpaUploadPackageBuilder.new.generate(
@@ -28,15 +30,18 @@ transporter.upload('1034264437', package_path)
 #puts transporter.download('1034264437')
 =end
 
-Spaceship::Tunes.login('ypavel@outlook.com', '!111Zzzz')
+
+Spaceship::Tunes.login(AppMakerConfig::USER, AppMakerConfig::PASSWORD)
 app = Spaceship::Tunes::Application.find(1034264437)
 
 version = app.edit_version
 
 builds = version.candidate_builds
+puts '------------------------------------------'.green
 builds.each do |build|
-   puts build
-   puts '---------------------'
+   puts "#{build.app_name} #{build.train_version}(#{build.build_version}) - #{build.processing ? 'processing' : 'ready'}"
+#puts build
+   puts '------------------------------------------'.green
 end
 
 #version.select_build(builds.first)

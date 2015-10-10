@@ -1,7 +1,11 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << '.'
+
 require 'spaceship'
 require 'openssl'
+
+require 'config'
 
 def camel_case(str)
   words = str.downcase.split
@@ -22,7 +26,7 @@ appName = ARGV[0]
 appNameJoined = ARGV[0].split(' ').join
 app_id = ARGV[1] + '.' + camel_case(appName)
 
-client = Spaceship.login('', '')
+client = Spaceship.login(AppMakerConfig::DEV_USER, AppMakerConfig::DEV_PASSWORD)
 puts "Logged in"
 #Spaceship.select_team
 
