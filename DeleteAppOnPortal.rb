@@ -9,7 +9,7 @@ end
 
 app_id = ARGV[0]
 
-client = Spaceship.login('ypavel@gmail.com', 'Dk&9t6W6yWL7')
+client = Spaceship.login('', '')
 
 puts "Logged in"
 

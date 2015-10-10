@@ -22,7 +22,7 @@ appName = ARGV[0]
 appNameJoined = ARGV[0].split(' ').join
 app_id = ARGV[1] + '.' + camel_case(appName)
 
-client = Spaceship.login('ypavel@gmail.com', 'Dk&9t6W6yWL7')
+client = Spaceship.login('', '')
 puts "Logged in"
 #Spaceship.select_team
 

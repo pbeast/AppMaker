@@ -5,7 +5,7 @@ class TunesConnect
   def initialize(bundleId)
     @bundleId = bundleId
 
-    Spaceship::Tunes.login('mobitti', 'Mobitti2014')
+    Spaceship::Tunes.login('', '')
     puts 'Logged In'
   end
 
