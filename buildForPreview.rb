@@ -18,9 +18,19 @@
 #puts value ? "true" : "false"
 
 require 'fastlane_core'
+require 'colorize'
 
+package_path = FastlaneCore::IpaUploadPackageBuilder.new.generate(
+        app_id: '1034264437',
+        ipa_path: '/Users/pavelyankelevich/Tmp/Previews/PublishingTestApp/PublishingTestApp.ipa',
+        package_path: "/Users/pavelyankelevich/Tmp"
+      )
 
-uploader = FastlaneCore::ItunesTransporter::new('ypavel@gmail.com', 'Dk&9t6W6yWL7')
-puts uploader.download('1034264437')
+puts package_path.yellow
+
+transporter = FastlaneCore::ItunesTransporter::new('ypavel@outlook.com', '!111Zzzz')
+transporter.upload('1034264437', package_path)
+
+puts transporter.download('1034264437')
 puts 'Done'
 
