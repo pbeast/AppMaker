@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << '.'
+
 require 'sinatra'
 require 'json'
 require 'securerandom'
@@ -6,13 +10,15 @@ require 'net/http'
 require "uri"
 require 'colorize'
 
+require 'config'
+
 set :port, 1234
 
 $stdout.sync = true
 
 workspace = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
 previewsLocation = 'http://cc673dd2.ngrok.io'
-appetizeApiToken = 'tok_p5451b2aep2cpzjnj1rdt647pg'
+appetizeApiToken = AppMakerConfig::APPETIZE_API_TOKEN
 workFolder = File::expand_path("~/Work/AppMaker")
 
 def camel_case(str)

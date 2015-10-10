@@ -1,9 +1,12 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH << '.'
+
 require 'spaceship'
+require 'config'
 
 
-client = Spaceship.login('ypavel@gmail.com', 'Dk&9t6W6yWL7')
+client = Spaceship.login(AppMakerConfig::DEV_USER, AppMakerConfig::DEV_PASSWORD)
 puts "Logged in"
 client.team_id = 'P2WQ65BAA8'
 
