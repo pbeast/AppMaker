@@ -15,19 +15,19 @@ languages([
 # Where should the resulting screenshots be stored?
 screenshots_path "./screenshots"
 
-# clear_previous_screenshots # remove the '#'' to clear all previously generated screenshots before creating new ones
+clear_previous_screenshots # remove the '#'' to clear all previously generated screenshots before creating new ones
 
 # JavaScript UIAutomation file
 # js_file './snapshot.js'
 
 # The name of the project's scheme
-# scheme 'SchemeName'
+scheme 'PublishingTestApp'
 
 # Where is your project (or workspace)? Provide the full path here
 # project_path './YourProject.xcworkspace'
 
 # By default, the latest version should be used automatically. If you want to change it, do it here
-# ios_version '8.1'
+ios_version '8.4'
 
 # Comment out the line below to add a `SNAPSHOT` preprocessor macro
 # More information available: https://github.com/krausefx/snapshot#custom-args-for-the-build-command

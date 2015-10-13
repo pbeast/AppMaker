@@ -14,15 +14,25 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SimulatorStatusMagic.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>574DDB62EB82827E77C929F2D3ADFD30</key>
+		<key>5189C73B599C04071DFEAB6FAC59E070</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B281DA29A9C3EDFB45BA53651F6BA611</key>
+		<key>55CA62DB9C0AD27EB1580BF97BBD0884</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>81F5D86488E5B428E4EB4867AD08533E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
