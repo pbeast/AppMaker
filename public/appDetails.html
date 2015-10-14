@@ -16,6 +16,15 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
         <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
 
+        <style type="text/css">
+            .appIcon{
+                width: 150px;
+                height: 150px;
+                border-radius: 17.54%;
+                cursor: pointer;
+            }
+        </style>
+
         <script type="text/javascript">
             function getUrlVars()
             {
@@ -31,24 +40,63 @@
             }
 
             $( document ).ready(function() {
+                $('[data-toggle="tooltip"]').tooltip();
+
                 Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
 
                 var app_id = getUrlVars()["app_id"];
+                if (app_id != -1){
+                    var query = new Parse.Query("Application");
+                    query.equalTo("apple_id", app_id); 
+                    query.first(                 
+                    {
+                        success: function(result) {
+                            //$("#appNameAsLogo").text(result.get("Name"));
+                            $("#applicationName").val(result.get("Name"));
+                            $("#description").val(result.get("description"));
+                            $("#keywords").val(result.get("keywords"));
+                            $("#supportURL").val(result.get("supportURL"));
+                            $("#firstName").val(result.get("review_first_name"));
+                            $("#lastName").val(result.get("review_last_name"));
+                            $("#phoneNumber").val(result.get("review_phone_number"));
+                            $("#eMail").val(result.get("review_email"));
+                            $("#userName").val(result.get("review_demo_user"));
+                            $("#password").val(result.get("review_demo_password"));
+                            $("#reviewNotes").val(result.get("review_notes"));
+
+                            $("#appIcon").attr("src", result.get("large_app_icon"))
+                        },
+                        error: function(error) {
+                            alert(error);
+                        }
+                    });
+                }
             });
         </script>
     </head>
   <body>
     <nav class="navbar navbar-default">
       <div class="container">
-        <ul class="nav navbar-nav navbar-left">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="./index.html">Back To All Apps</a>
+          </div>
+
+          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+<!--         <ul class="nav navbar-nav navbar-left">
             <li>
                 <a href="./index.html">Back To All Apps</a>
             </li>
             <li>
-                <span class="navbar-brand">Application Name</span>
+                <span class="navbar-brand" id="appNameAsLogo"></span>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+ -->        <ul class="nav navbar-nav navbar-right">
             <li>
                 <a hred="#">Publish</a>
             </li>
@@ -63,12 +111,103 @@
             </ul>
           </li>
         </ul>
-      </div><!-- /.container-fluid -->
+    </div>
+      </div>
     </nav>
 
-    <div class="container-fluid">
+    <div class="container">
+        <div class="page-header">
+            <h1>App Information</h1>
+        </div>
       <div class="row">
+        <div class="col-md-2 col-lg-2 col-sm-12">
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-lg-12 col-sm-12">
+                    <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
+                </div>
+            </div>
+        </div>  
+        <div class="form-group col-md-5 col-lg-5 col-sm-12">
+            <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
+            <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
+        </div>
       </div>
+                      <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        &nbsp;
+                    </div>
+                </div>
+
+        <div class="row">
+            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                <label for="description">Description <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
+                <textarea class="form-control" id="description" placeholder="Description" rows="10"></textarea>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                        <label for="keywords">Keywords <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="One or more keywords that describe your app. Keywords make App Store search results more accurate. Separate keywords with a comma."/></label>
+                        <input type="text" class="form-control" id="keywords" placeholder="Keywords" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                        <label for="supportURL">Support URL <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A URL with support information for your app. This URL will be visible on the App Store."/></label>
+                        <input type="text" class="form-control" id="supportURL" placeholder="Support URL" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-header">
+            <h1>App Review Information</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <div class="row">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                        <label for="firstName">Contact Information <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
+                        <input type="text" class="form-control" id="firstName" placeholder="First Name" />
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                        <label for="lastName">&nbsp;</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
+                    </div>
+                </div>                                
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" />
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <input type="text" class="form-control" id="eMail" placeholder="E-Mail" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                        <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
+                        <input type="text" class="form-control" id="userName" placeholder="User Name" />
+                    </div>
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                        <label for="password">&nbsp;</label>
+                        <input type="text" class="form-control" id="password" placeholder="Password" />
+                    </div>
+                </div>                                
+            </div>
+
+            <div class="col-md-6 col-lg-6 col-sm-12">
+                <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
+                <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
+            </div>
+        </div>
     </div>
   </body>
 </html>
