@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+    <head>
+        <title>AppMaker</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+        <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
+
+        <script type="text/javascript">
+            function getUrlVars()
+            {
+                var vars = [], hash;
+                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+                for(var i = 0; i < hashes.length; i++)
+                {
+                    hash = hashes[i].split('=');
+                    vars.push(hash[0]);
+                    vars[hash[0]] = hash[1];
+                }
+                return vars;
+            }
+
+            $( document ).ready(function() {
+                Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
+
+                var app_id = getUrlVars()["app_id"];
+
+                
+            });
+        </script>
+    </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <a href="./index.html">Back To All Apps</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <span class="navbar-brand">Application Name</span>
+            </li>
+        </ul>
+      </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+      </div>
+    </div>
+  </body>
+</html>
