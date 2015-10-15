@@ -148,8 +148,11 @@
           }
           else{
             $('.grid-item').hide();
-            var selector = '.grid-item[data*="' + filter + '"]';
-            $(selector).show();
+            $('.grid-item').filter(function() {
+              return $(this).attr("data").toLowerCase().indexOf(filter.toLowerCase()) > -1;
+            }).show();
+            //var selector = '.grid-item[data*="' + filter + '"]';
+            //$(selector).show();
             $masonry.masonry('layout');
           }
         });
