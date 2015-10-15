@@ -106,102 +106,118 @@
         </div>
     </nav>
     <div class="container">
-        <div class="page-header">
-            <h1>App Information</h1>
+        <div>
+              <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab" data-toggle="tab">Store Information</a></li>
+                <li role="presentation"><a href="#appConfig" aria-controls="appConfig" role="tab" data-toggle="tab">App Configuration</a></li>
+                <li role="presentation"><a href="#uiConfig" aria-controls="uiConfig" role="tab" data-toggle="tab">UI Configuration</a></li>
+              </ul>
+              <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="storeInfo">
+                    <div class="page-header">
+                        <h1>App Information</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 col-lg-2 col-sm-12">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-sm-12">
+                                    <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-sm-12">
+                                    <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-5 col-lg-5 col-sm-12">
+                            <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
+                            <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12">
+                            &nbsp;
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                            <label for="description">Description <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
+                            <textarea class="form-control" id="description" placeholder="Description" rows="10"></textarea>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                                    <label for="keywords">Keywords <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="One or more keywords that describe your app. Keywords make App Store search results more accurate. Separate keywords with a comma."/></label>
+                                    <input type="text" class="form-control" id="keywords" placeholder="Keywords" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                                    <label for="supportURL">Support URL <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A URL with support information for your app. This URL will be visible on the App Store."/></label>
+                                    <input type="text" class="form-control" id="supportURL" placeholder="Support URL" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-header">
+                        <h1>App Review Information</h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6 col-sm-12">
+                            <div class="row">
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <label for="firstName">Contact Information <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="firstName" placeholder="First Name" />
+                                </div>
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" />
+                                </div>
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="eMail" placeholder="E-Mail" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-sm-12">
+                                    &nbsp;
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="userName" placeholder="User Name" />
+                                </div>
+                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                    <input type="text" class="form-control" id="password" placeholder="Password" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-12">
+                            <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
+                            <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="appConfig">
+                </div>
+                <div role="tabpanel" class="tab-pane" id="uiConfig">
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-2 col-lg-2 col-sm-12">
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
-                    </div>
-                </div>
-            </div>
-            <div class="form-group col-md-5 col-lg-5 col-sm-12">
-                <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
-                <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 col-lg-12 col-sm-12">
-                &nbsp;
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                <label for="description">Description <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
-                <textarea class="form-control" id="description" placeholder="Description" rows="10"></textarea>
-            </div>
-            <div class="col-md-6 col-lg-6 col-sm-12">
-                <div class="row">
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                        <label for="keywords">Keywords <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="One or more keywords that describe your app. Keywords make App Store search results more accurate. Separate keywords with a comma."/></label>
-                        <input type="text" class="form-control" id="keywords" placeholder="Keywords" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                        <label for="supportURL">Support URL <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A URL with support information for your app. This URL will be visible on the App Store."/></label>
-                        <input type="text" class="form-control" id="supportURL" placeholder="Support URL" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="page-header">
-            <h1>App Review Information</h1>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-lg-6 col-sm-12">
-                <div class="row">
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <label for="firstName">Contact Information <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="firstName" placeholder="First Name" />
-                    </div>
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" />
-                    </div>
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="eMail" placeholder="E-Mail" />
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-sm-12">
-                        &nbsp;
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="userName" placeholder="User Name" />
-                    </div>
-                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <input type="text" class="form-control" id="password" placeholder="Password" />
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-6 col-sm-12">
-                <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
-                <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
-            </div>
-        </div>
-    </div>
-</body>
-</html>>
+    </body>
+</html>
