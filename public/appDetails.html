@@ -70,7 +70,15 @@
                             alert(error);
                         }
                     });
-                }
+                };
+
+                $('input, textarea').on('input', function() {
+                    $('#save').removeAttr("disabled");
+                });
+
+                $('#save').on('click', function(){
+                    $('#save').attr("disabled", "disabled");
+                });
             });
         </script>
     </head>
@@ -107,13 +115,20 @@
     </nav>
     <div class="container">
         <div>
-              <!-- Nav tabs -->
-              <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab" data-toggle="tab">Store Information</a></li>
-                <li role="presentation"><a href="#appConfig" aria-controls="appConfig" role="tab" data-toggle="tab">App Configuration</a></li>
-                <li role="presentation"><a href="#uiConfig" aria-controls="uiConfig" role="tab" data-toggle="tab">UI Configuration</a></li>
-              </ul>
-              <!-- Tab panes -->
+            <div class="row">
+                <div class="col-md-10 col-lg-10 col-sm-10">
+                  <!-- Nav tabs -->
+                  <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab" data-toggle="tab">Store Information</a></li>
+                    <li role="presentation"><a href="#appConfig" aria-controls="appConfig" role="tab" data-toggle="tab">App Configuration</a></li>
+                    <li role="presentation"><a href="#uiConfig" aria-controls="uiConfig" role="tab" data-toggle="tab">UI Configuration</a></li>
+                  </ul>
+                  <!-- Tab panes -->
+                </div>
+                <div class="col-md-2 col-lg-2 col-sm-2">
+                    <button type="button" class="btn btn-default" disabled="disabled" id="save">Save</button>
+                </div>
+            </div>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="storeInfo">
                     <div class="page-header">
