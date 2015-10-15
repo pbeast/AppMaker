@@ -267,7 +267,7 @@
         </form>
         
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="appDetails.html?app_id=-1">Add New Application</a></li>
+          <li><a data-toggle="modal" data-target="#newAppModal" style="cursor: pointer;">Add New Application</a></li>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -287,6 +287,34 @@
       <div class="container-fluid">
         <div class="row">
           <div class="grid col-md-12 col-lg-12">
+          </div>
+        </div>
+      </div>
+
+<!-- New App Dialog -->
+      <div class="modal fade" id="newAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="exampleModalLabel">New Application</h4>
+            </div>
+            <form action="./appDetails.html">
+              <div class="modal-body">
+                  <div class="form-group">
+                    <label for="clubID" class="control-label">Club ID</label>
+                    <input type="text" class="form-control" id="clubID" name="clubID">
+                  </div>
+                  <div class="form-group">
+                    <label for="appName" class="control-label">Application Name</label>
+                    <input type="text" class="form-control" id="appName" name="appName">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
