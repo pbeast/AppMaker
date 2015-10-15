@@ -51,7 +51,6 @@
                     query.first(                 
                     {
                         success: function(result) {
-                            //$("#appNameAsLogo").text(result.get("Name"));
                             $("#applicationName").val(result.get("Name"));
                             $("#description").val(result.get("description"));
                             $("#keywords").val(result.get("keywords"));
@@ -116,7 +115,7 @@
     <div class="container">
         <div>
             <div class="row">
-                <div class="col-md-10 col-lg-10 col-sm-10">
+                <div class="col-md-11 col-lg-11 col-sm-11">
                   <!-- Nav tabs -->
                   <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab" data-toggle="tab">Store Information</a></li>
@@ -125,7 +124,7 @@
                   </ul>
                   <!-- Tab panes -->
                 </div>
-                <div class="col-md-2 col-lg-2 col-sm-2">
+                <div class="col-md-1 col-lg-1 col-sm-1">
                     <button type="button" class="btn btn-default" disabled="disabled" id="save">Save</button>
                 </div>
             </div>
