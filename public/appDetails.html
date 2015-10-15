@@ -74,75 +74,64 @@
             });
         </script>
     </head>
-  <body>
+<body>
     <nav class="navbar navbar-default">
-      <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="./index.html">Back To All Apps</a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-<!--         <ul class="nav navbar-nav navbar-left">
-            <li>
-                <a href="./index.html">Back To All Apps</a>
-            </li>
-            <li>
-                <span class="navbar-brand" id="appNameAsLogo"></span>
-            </li>
-        </ul>
- -->        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a hred="#">Publish</a>
-            </li>
-            <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Preview <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">iPhone 4s</a></li>
-              <li><a href="#">iPhone 5</a></li>
-              <li><a href="#">iPhone 5s</a></li>
-              <li><a href="#">iPhone 6</a></li>
-              <li><a href="#">iPhone 6 Plus</a></li>
-            </ul>
-          </li>
-        </ul>
-    </div>
-      </div>
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./index.html">Back To All Apps</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a hred="#">Publish</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Preview <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">iPhone 4s</a></li>
+                            <li><a href="#">iPhone 5</a></li>
+                            <li><a href="#">iPhone 5s</a></li>
+                            <li><a href="#">iPhone 6</a></li>
+                            <li><a href="#">iPhone 6 Plus</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-
     <div class="container">
         <div class="page-header">
             <h1>App Information</h1>
         </div>
-      <div class="row">
-        <div class="col-md-2 col-lg-2 col-sm-12">
-            <div class="row">
-                <div class="col-md-12 col-lg-12 col-sm-12">
-                    <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12 col-lg-12 col-sm-12">
-                    <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
-                </div>
-            </div>
-        </div>  
-        <div class="form-group col-md-5 col-lg-5 col-sm-12">
-            <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
-            <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
-        </div>
-      </div>
-                      <div class="row">
+        <div class="row">
+            <div class="col-md-2 col-lg-2 col-sm-12">
+                <div class="row">
                     <div class="col-md-12 col-lg-12 col-sm-12">
-                        &nbsp;
+                        <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
                     </div>
                 </div>
-
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-5 col-lg-5 col-sm-12">
+                <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
+                <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12">
+                &nbsp;
+            </div>
+        </div>
         <div class="row">
             <div class="form-group col-md-6 col-lg-6 col-sm-12">
                 <label for="description">Description <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
@@ -171,18 +160,21 @@
                 <div class="row">
                     <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <label for="firstName">Contact Information <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <input type="text" class="form-control" id="firstName" placeholder="First Name" />
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <label for="lastName">&nbsp;</label>
                         <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
                     </div>
-                </div>                                
+                </div>
                 <div class="row">
-                    <div class="col-md-6 col-lg-6 col-sm-12">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" />
                     </div>
-                    <div class="col-md-6 col-lg-6 col-sm-12">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <input type="text" class="form-control" id="eMail" placeholder="E-Mail" />
                     </div>
                 </div>
@@ -194,20 +186,22 @@
                 <div class="row">
                     <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
                         <input type="text" class="form-control" id="userName" placeholder="User Name" />
                     </div>
                     <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                        <label for="password">&nbsp;</label>
                         <input type="text" class="form-control" id="password" placeholder="Password" />
                     </div>
-                </div>                                
+                </div>
             </div>
-
             <div class="col-md-6 col-lg-6 col-sm-12">
                 <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
                 <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
             </div>
         </div>
     </div>
-  </body>
-</html>
+</body>
+</html>>
