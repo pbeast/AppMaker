@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>AppMaker</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,309 +18,321 @@
     <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
 
     <style>
-      .grid-item { width: 200px !important; margin-left: 10px;height: 290px;}
-      .grid-item--width2 { width: 400px; }
-      .appIcon_ {
-      -webkit-font-smoothing: antialiased;
-      -webkit-mask-image: url(https://itunesconnect.apple.com/itc/images/layoutelements/ios7-icon.svg);
-      -webkit-mask-repeat: no-repeat;
-      -webkit-mask-size: 100% 100%;
-      background-size: 100% 100%;
-      border-color: rgb(0, 136, 255);
-      border-radius: 17.544%;
-      border-style: none;
-      border-width: 0px;
-      box-sizing: border-box;
-      color: rgb(0, 136, 255);
-      cursor: pointer;
-      display: block;
-      font-family: 'Helvetica Neue', sans-serif;
-      font-size: 15px;
-      font-stretch: normal;
-      font-style: normal;
-      font-variant: normal;
-      font-weight: 300;
-      height: 150px;
-      line-height: 15px;
-      list-style-image: none;
-      list-style-position: outside;
-      list-style-type: none;
-      margin: 0px;
-      padding: 0px;
-      text-align: center;
-      text-rendering: optimizeLegibility;
-      vertical-align: baseline;
-      width: 150px;
-      }
+        .grid-item {
+            width: 200px !important;
+            margin-left: 10px;
+            height: 290px;
+        }
+
+        .grid-item--width2 {
+            width: 400px;
+        }
+
+        .appIcon_ {
+            -webkit-font-smoothing: antialiased;
+            -webkit-mask-image: url(https://itunesconnect.apple.com/itc/images/layoutelements/ios7-icon.svg);
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 100% 100%;
+            background-size: 100% 100%;
+            border-color: rgb(0, 136, 255);
+            border-radius: 17.544%;
+            border-style: none;
+            border-width: 0px;
+            box-sizing: border-box;
+            color: rgb(0, 136, 255);
+            cursor: pointer;
+            display: block;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 15px;
+            font-stretch: normal;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: 300;
+            height: 150px;
+            line-height: 15px;
+            list-style-image: none;
+            list-style-position: outside;
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+            text-rendering: optimizeLegibility;
+            vertical-align: baseline;
+            width: 150px;
+        }
     </style>
 
     <script type="text/javascript">
 
 
-    var $masonry;
-/*
-      var iFrame;
-      var currentScreenshot = 1;
-      var ws;
+        var $masonry;
+        /*
+         var iFrame;
+         var currentScreenshot = 1;
+         var ws;
 
-      function fixedEncodeURIComponent (str) {
-        return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-          return '%' + c.charCodeAt(0).toString(16);
-        });
-      }
+         function fixedEncodeURIComponent (str) {
+         return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+         return '%' + c.charCodeAt(0).toString(16);
+         });
+         }
 
-      var previewBuild = function(){
+         var previewBuild = function(){
 
-        var scheme = $(this).attr("data");
+         var scheme = $(this).attr("data");
 
-        $('#takeScreenshot').hide();
-        $('#previewArea').empty();
-        $('#previewArea').append('<div class="alert alert-success" role="alert">It takes some time, so meanwhile watch some...</div>');
-        $('#previewArea').append('<iframe src="http://giphy.com/embed/oDDEfZkth8Xe0?html5=true" width="480" height="319" frameborder="0" class="giphy-embed" allowfullscreen=""></iframe>');
-
-
-        $.ajax('http://127.0.0.1:1234/build/'+fixedEncodeURIComponent(scheme), {
-          timeout: 60*1000*3,
-          success: function(result){
-            var obj = jQuery.parseJSON(result);
-            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + obj.publicKey + '?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
-
-            iFrame = $(iFrameSrc);
-            $('#previewArea').empty();
-            $('#previewArea').append(iFrame);
-          },
-          error: function(e){
-            $('#previewArea').empty();
-            $('#previewArea').append('<div class="alert alert-danger" role="alert">Oh shit...' + e.statusText + '</div>');
-            $('#previewArea').append('<iframe src="http://giphy.com/embed/33iqmp5ATXT5m?html5=true" width="480" height="204" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/sad-depressed-disappointed-33iqmp5ATXT5m">via GIPHY</a></p>');
-
-            
-          }
-        });
-      }
-
-      function debug(str){ $("#debug").append("<p>"+str+"</p>"); };
-*/
-
-      $( document ).ready(function() {
-
-        $masonry = $('.grid').masonry({
-          // options
-          itemSelector: '.grid-item',
-          columnWidth: 210
-        });
-
-        Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
-
-        var query = new Parse.Query("Application");
-        query.find({
-            success:function(results){
-
-              for (var i = 0; i < results.length; i++) {
-                    var object = results[i];
-
-                    var app = $('<div class="thumbnail grid-item" data="' + object.get('Name') + '" />');
-                    app.append($('<a href="appDetails.html?app_id='+ object.get('apple_id') + '"><img src="' + object.get('app_icon_preview_url') + '" class="appIcon"></a>'));
-                    var caption = $('<div class="caption" />');
-                    caption.append($('<h3 dir="rtl" style="text-overflow: ellipsis; overflow: hidden;white-space: nowrap;" id="appName">' + object.get('Name') + '</h3>'));
-                    caption.append($('<p>' + object.get('version') + '</p>'));
-                    app.append(caption);
-
-                    $(".grid").append(app);
-                    $masonry.masonry( 'appended', app );
-                }
-
-                setTimeout(function(){
-                  $masonry.masonry('layout');
-                }, 100);
-            },
-
-            error: function(error) {
-              // error is an instance of Parse.Error.
-            }    
-        });
-
-        $('#appFilter').on('input', function() {
-          var filter = $('#appFilter').val();
-
-          if (filter == ''){
-            $(".grid-item").show();
-            $masonry.masonry('layout');
-          }
-          else{
-            $('.grid-item').hide();
-            $('.grid-item').filter(function() {
-              return $(this).attr("data").toLowerCase().indexOf(filter.toLowerCase()) > -1;
-            }).show();
-            //var selector = '.grid-item[data*="' + filter + '"]';
-            //$(selector).show();
-            $masonry.masonry('layout');
-          }
-        });
-
-/*
-        ws = new WebSocket("ws://127.0.0.1:9090/websocket");
-        ws.onmessage = function(evt) { 
-          debug("&lt;&lt;&lt; " + evt.data); 
-        };
-        ws.onclose = function() { debug("socket closed"); };
-        ws.onopen = function() {
-          debug("connected...");
-        };
+         $('#takeScreenshot').hide();
+         $('#previewArea').empty();
+         $('#previewArea').append('<div class="alert alert-success" role="alert">It takes some time, so meanwhile watch some...</div>');
+         $('#previewArea').append('<iframe src="http://giphy.com/embed/oDDEfZkth8Xe0?html5=true" width="480" height="319" frameborder="0" class="giphy-embed" allowfullscreen=""></iframe>');
 
 
-        $('#takeScreenshot').bind('click', function(){
+         $.ajax('http://127.0.0.1:1234/build/'+fixedEncodeURIComponent(scheme), {
+         timeout: 60*1000*3,
+         success: function(result){
+         var obj = jQuery.parseJSON(result);
+         var iFrameSrc = '<iframe src="https://appetize.io/embed/' + obj.publicKey + '?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
 
-          if (ws != undefined){
-            debug("&gt;&gt;&gt; hello server");
-            ws.send("hello server");
-          }
+         iFrame = $(iFrameSrc);
+         $('#previewArea').empty();
+         $('#previewArea').append(iFrame);
+         },
+         error: function(e){
+         $('#previewArea').empty();
+         $('#previewArea').append('<div class="alert alert-danger" role="alert">Oh shit...' + e.statusText + '</div>');
+         $('#previewArea').append('<iframe src="http://giphy.com/embed/33iqmp5ATXT5m?html5=true" width="480" height="204" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/sad-depressed-disappointed-33iqmp5ATXT5m">via GIPHY</a></p>');
 
-        return;
-*/
 
-/*
-          var ifr = document.querySelector('iframe');
-          ifr.contentWindow.postMessage('getScreenshot', '*');
-        });
-        
-        var saveScreenshot = function (){
-          var ifr = document.querySelector('iframe');
-        }
+         }
+         });
+         }
 
-        // Receiving messages from iframe in parent window
-        var messageEventHandler = function(event){
-    
-          if(event.data == 'sessionRequested'){
-              console.log(event.data);
-          }
-          
-          else if(event.data == 'userError'){
-              console.log(event.data);
-          }
-          
-          else if(event.data == 'sessionQueued'){
-              console.log(event.data);
-          }
-          
-          else if(event.data == 'appLaunch'){
-              console.log(event.data);
-          }
-          
-          else if(event.data == 'firstFrameReceived'){
-              console.log(event.data);
-            $('#takeScreenshot').show();
-          }
-          
-          else if(event.data == 'timeoutWarning'){
-              console.log(event.data);
-          }
-          
-          else if(event.data == 'sessionEnded'){
-              console.log(event.data);
-          }
-          
-          else if(event.data && event.data.type == 'screenshot'){
-              console.log(event.data);
-              document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
+         function debug(str){ $("#debug").append("<p>"+str+"</p>"); };
+         */
 
-              currentScreenshot++;
-              if (currentScreenshot > 4)
-                currentScreenshot = 1;
-          }
-        };
-        window.addEventListener('message', messageEventHandler, false);
+        $(document).ready(function () {
 
-        $('#takeScreenshot').hide();
- 
-        $.ajax('http://127.0.0.1:1234/schemes', {
-          success: function(result){
-            $.each(result, function(i, v){
-              $('#schemes').append($('<tr><td>' + v + '</td><td><button type="button" class="btn btn-primary buildAndPreview" data="' + v +'">Build & Preview</button></td></tr>'));
+            $masonry = $('.grid').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 210
             });
 
-            $('.buildAndPreview').on('click', previewBuild);
+            Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
 
-          },
-          error: function(e){
-            alert('Error:' + e);
-          }
+            var query = new Parse.Query("Application");
+            query.find({
+                success: function (results) {
+
+                    for (var i = 0; i < results.length; i++) {
+                        var object = results[i];
+
+                        var app = $('<div class="thumbnail grid-item" data="' + object.get('Name') + '" />');
+                        app.append($('<a href="appDetails.html?app_id=' + object.get('apple_id') + '"><img src="' + object.get('app_icon_preview_url') + '" class="appIcon"></a>'));
+                        var caption = $('<div class="caption" />');
+                        caption.append($('<h3 dir="rtl" style="text-overflow: ellipsis; overflow: hidden;white-space: nowrap;" id="appName">' + object.get('Name') + '</h3>'));
+                        caption.append($('<p>' + object.get('version') + '</p>'));
+                        app.append(caption);
+
+                        $(".grid").append(app);
+                        $masonry.masonry('appended', app);
+                    }
+
+                    setTimeout(function () {
+                        $masonry.masonry('layout');
+                    }, 100);
+                },
+
+                error: function (error) {
+                    // error is an instance of Parse.Error.
+                }
+            });
+
+            $('#appFilter').on('input', function () {
+                var filter = $('#appFilter').val();
+
+                if (filter == '') {
+                    $(".grid-item").show();
+                    $masonry.masonry('layout');
+                }
+                else {
+                    $('.grid-item').hide();
+                    $('.grid-item').filter(function () {
+                        return $(this).attr("data").toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                    }).show();
+                    //var selector = '.grid-item[data*="' + filter + '"]';
+                    //$(selector).show();
+                    $masonry.masonry('layout');
+                }
+            });
+
+            /*
+             ws = new WebSocket("ws://127.0.0.1:9090/websocket");
+             ws.onmessage = function(evt) {
+             debug("&lt;&lt;&lt; " + evt.data);
+             };
+             ws.onclose = function() { debug("socket closed"); };
+             ws.onopen = function() {
+             debug("connected...");
+             };
+
+
+             $('#takeScreenshot').bind('click', function(){
+
+             if (ws != undefined){
+             debug("&gt;&gt;&gt; hello server");
+             ws.send("hello server");
+             }
+
+             return;
+             */
+
+            /*
+             var ifr = document.querySelector('iframe');
+             ifr.contentWindow.postMessage('getScreenshot', '*');
+             });
+
+             var saveScreenshot = function (){
+             var ifr = document.querySelector('iframe');
+             }
+
+             // Receiving messages from iframe in parent window
+             var messageEventHandler = function(event){
+
+             if(event.data == 'sessionRequested'){
+             console.log(event.data);
+             }
+
+             else if(event.data == 'userError'){
+             console.log(event.data);
+             }
+
+             else if(event.data == 'sessionQueued'){
+             console.log(event.data);
+             }
+
+             else if(event.data == 'appLaunch'){
+             console.log(event.data);
+             }
+
+             else if(event.data == 'firstFrameReceived'){
+             console.log(event.data);
+             $('#takeScreenshot').show();
+             }
+
+             else if(event.data == 'timeoutWarning'){
+             console.log(event.data);
+             }
+
+             else if(event.data == 'sessionEnded'){
+             console.log(event.data);
+             }
+
+             else if(event.data && event.data.type == 'screenshot'){
+             console.log(event.data);
+             document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
+
+             currentScreenshot++;
+             if (currentScreenshot > 4)
+             currentScreenshot = 1;
+             }
+             };
+             window.addEventListener('message', messageEventHandler, false);
+
+             $('#takeScreenshot').hide();
+
+             $.ajax('http://127.0.0.1:1234/schemes', {
+             success: function(result){
+             $.each(result, function(i, v){
+             $('#schemes').append($('<tr><td>' + v + '</td><td><button type="button" class="btn btn-primary buildAndPreview" data="' + v +'">Build & Preview</button></td></tr>'));
+             });
+
+             $('.buildAndPreview').on('click', previewBuild);
+
+             },
+             error: function(e){
+             alert('Error:' + e);
+             }
+             });
+
+             */
         });
-
-*/
-      });
     </script>
 </head>
 <body>
-  <nav class="navbar navbar-default">
+<nav class="navbar navbar-default">
     <div class="container">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Mobitti App Maker</a>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <form class="navbar-form navbar-left" role="search">
-            <input type="text" class="form-control" placeholder="Filter Apps" id="appFilter">
-        </form>
-        
-        <ul class="nav navbar-nav navbar-right">
-          <li><a data-toggle="modal" data-target="#newAppModal" style="cursor: pointer;">Add New Application</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="#">Re-sync from iTunes Connect</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="./">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-        </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-      </nav>
-      <div id="debug"></div>
-      <div id="msg"></div>
-      <div class="container-fluid">
-        <div class="row">
-          <div class="grid col-md-12 col-lg-12">
-          </div>
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Mobitti App Maker</a>
         </div>
-      </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left" role="search">
+                <input type="text" class="form-control" placeholder="Filter Apps" id="appFilter">
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a data-toggle="modal" data-target="#newAppModal" style="cursor: pointer;">Add New Application</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Menu <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Re-sync from iTunes Connect</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="./">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div id="debug"></div>
+<div id="msg"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="grid col-md-12 col-lg-12">
+        </div>
+    </div>
+</div>
 
 <!-- New App Dialog -->
-      <div class="modal fade" id="newAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
+<div class="modal fade" id="newAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
             <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="exampleModalLabel">New Application</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">New Application</h4>
             </div>
             <form action="./appDetails.html">
-              <div class="modal-body">
-                  <div class="form-group">
-                    <label for="clubID" class="control-label">Club ID</label>
-                    <input type="text" class="form-control" id="clubID" name="clubID">
-                  </div>
-                  <div class="form-group">
-                    <label for="appName" class="control-label">Application Name</label>
-                    <input type="text" class="form-control" id="appName" name="appName">
-                  </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create</button>
-              </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="clubID" class="control-label">Club ID</label>
+                        <input type="text" class="form-control" id="clubID" name="clubID">
+                    </div>
+                    <div class="form-group">
+                        <label for="appName" class="control-label">Application Name</label>
+                        <input type="text" class="form-control" id="appName" name="appName">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
             </form>
-          </div>
         </div>
-      </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

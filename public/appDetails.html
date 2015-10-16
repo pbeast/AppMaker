@@ -1,250 +1,326 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>AppMaker</title>
+<head>
+    <title>AppMaker</title>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
-        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
-        <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+    <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
 
-        <style type="text/css">
-            .appIcon{
-                width: 150px;
-                height: 150px;
-                border-radius: 17.54%;
-                cursor: pointer;
+    <style type="text/css">
+        .appIcon {
+            width: 150px;
+            height: 150px;
+            border-radius: 17.54%;
+            cursor: pointer;
+        }
+    </style>
+
+    <script type="text/javascript">
+        function urldecode(str) {
+            return decodeURIComponent((str + '').replace(/\+/g, '%20'));
+        }
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
             }
-        </style>
+            return vars;
+        }
 
-        <script type="text/javascript">
-            function urldecode(str) {
-                return decodeURIComponent((str+'').replace(/\+/g, '%20'));
-            }   
-            function getUrlVars()
-            {
-                var vars = [], hash;
-                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-                for(var i = 0; i < hashes.length; i++)
-                {
-                    hash = hashes[i].split('=');
-                    vars.push(hash[0]);
-                    vars[hash[0]] = hash[1];
-                }
-                return vars;
+
+        var ws;
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+
+            Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
+
+            var app_id = getUrlVars()["app_id"];
+            var club_id = getUrlVars()["clubID"];
+            var appName = getUrlVars()["appName"];
+
+            if (app_id != undefined) {
+                var query = new Parse.Query("Application");
+                query.equalTo("apple_id", app_id);
+                query.first(
+                        {
+                            success: function (result) {
+                                $("#applicationName").val(result.get("Name"));
+                                $("#description").val(result.get("description"));
+                                $("#keywords").val(result.get("keywords"));
+                                $("#supportURL").val(result.get("supportURL"));
+                                $("#firstName").val(result.get("review_first_name"));
+                                $("#lastName").val(result.get("review_last_name"));
+                                $("#phoneNumber").val(result.get("review_phone_number"));
+                                $("#eMail").val(result.get("review_email"));
+                                $("#userName").val(result.get("review_demo_user"));
+                                $("#password").val(result.get("review_demo_password"));
+                                $("#reviewNotes").val(result.get("review_notes"));
+
+                                $("#appIcon").attr("src", result.get("large_app_icon"))
+                            },
+                            error: function (error) {
+                                alert(error);
+                            }
+                        });
+            } else if (club_id === undefined || appName === undefined || club_id == '' || appName == '') {
+                window.history.back();
+            }
+            else {
+                $("#applicationName").val(urldecode(appName));
+                $('#save').removeAttr("disabled");
             }
 
-            $( document ).ready(function() {
-                $('[data-toggle="tooltip"]').tooltip();
-
-                Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
-
-                var app_id = getUrlVars()["app_id"];
-                var club_id = getUrlVars()["clubID"];
-                var appName = getUrlVars()["appName"];
-
-                if (app_id != undefined){
-                    var query = new Parse.Query("Application");
-                    query.equalTo("apple_id", app_id); 
-                    query.first(                 
-                    {
-                        success: function(result) {
-                            $("#applicationName").val(result.get("Name"));
-                            $("#description").val(result.get("description"));
-                            $("#keywords").val(result.get("keywords"));
-                            $("#supportURL").val(result.get("supportURL"));
-                            $("#firstName").val(result.get("review_first_name"));
-                            $("#lastName").val(result.get("review_last_name"));
-                            $("#phoneNumber").val(result.get("review_phone_number"));
-                            $("#eMail").val(result.get("review_email"));
-                            $("#userName").val(result.get("review_demo_user"));
-                            $("#password").val(result.get("review_demo_password"));
-                            $("#reviewNotes").val(result.get("review_notes"));
-
-                            $("#appIcon").attr("src", result.get("large_app_icon"))
-                        },
-                        error: function(error) {
-                            alert(error);
-                        }
-                    });
-                }else if (club_id === undefined || appName === undefined || club_id == '' || appName == ''){
-                    window.history.back();
-                }
-                else{
-                    $("#applicationName").val(urldecode(appName));
-                    $('#save').removeAttr("disabled");
-                }
-
-                $('input, textarea').on('input', function() {
-                    $('#save').removeAttr("disabled");
-                });
-
-                $('#save').on('click', function(){
-                    $('#save').attr("disabled", "disabled");
-                });
+            $('input, textarea').on('input', function () {
+                $('#save').removeAttr("disabled");
             });
-        </script>
-    </head>
+
+            $('#save').on('click', function () {
+                $('#save').attr("disabled", "disabled");
+            });
+
+
+            var count;
+            var buffer;
+
+            $(".preview").on('click', function (event) {
+                event.preventDefault();
+
+                count = 0;
+                buffer = '';
+                ws = new WebSocket("ws://127.0.0.1:9090");
+
+                ws.onmessage = function(evt) {
+                    $("#description").val($("#description").val() + evt.data);
+                    $('#description').scrollTop($('#description')[0].scrollHeight);
+                };
+
+                ws.onclose = function() {
+                    if (buffer != ''){
+                        $("#description").val($("#description").val() + buffer);
+                        buffer = '';
+                        $('#description').scrollTop($('#description')[0].scrollHeight);
+                    }
+
+                    $("#description").val( $("#description").val() + "socket closed" + "\r");
+                };
+                ws.onopen = function() {
+                    $("#description").val("connected..." + "\r");
+                    ws.send(JSON.stringify({command: "build", scheme : "Technion"}));
+                };
+            });
+
+            $("#clean").on('click', function (event) {
+                event.preventDefault();
+
+                ws = new WebSocket("ws://127.0.0.1:9090");
+
+                ws.onmessage = function(evt) {
+                    $("#description").val( $("#description").val() + evt.data);
+                    $('#description').scrollTop($('#description')[0].scrollHeight);
+                };
+                ws.onclose = function() {
+                    $("#description").val( $("#description").val() + "socket closed" + "\r");
+                };
+                ws.onopen = function() {
+                    $("#description").val("connected..." + "\r" + "\r");
+                    ws.send(JSON.stringify({command: "clean", scheme : "Technion"}));
+                };
+
+            });
+        });
+    </script>
+</head>
 <body>
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="./index.html">Back To All Apps</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#">Publish</a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Preview <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">iPhone 4s</a></li>
-                            <li><a href="#">iPhone 5</a></li>
-                            <li><a href="#">iPhone 5s</a></li>
-                            <li><a href="#">iPhone 6</a></li>
-                            <li><a href="#">iPhone 6 Plus</a></li>
-                        </ul>
-                    </li>
+            </button>
+            <a class="navbar-brand" href="./appList.html">Back To All Apps</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" id="publish">Publish</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Preview <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" class="preview" data="iPhone 4s">iPhone 4s</a></li>
+                        <li><a href="#" class="preview">iPhone 5</a></li>
+                        <li><a href="#" class="preview">iPhone 5s</a></li>
+                        <li><a href="#" class="preview">iPhone 6</a></li>
+                        <li><a href="#" class="preview">iPhone 6 Plus</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" id="clean">Clean</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div>
+        <div class="row">
+            <div class="col-md-11 col-lg-11 col-sm-11">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab"
+                                                              data-toggle="tab">Store Information</a></li>
+                    <li role="presentation"><a href="#appConfig" aria-controls="appConfig" role="tab" data-toggle="tab">App
+                        Configuration</a></li>
+                    <li role="presentation"><a href="#uiConfig" aria-controls="uiConfig" role="tab" data-toggle="tab">UI
+                        Configuration</a></li>
                 </ul>
+                <!-- Tab panes -->
+            </div>
+            <div class="col-md-1 col-lg-1 col-sm-1">
+                <button type="button" class="btn btn-default" disabled="disabled" id="save">Save</button>
             </div>
         </div>
-    </nav>
-    <div class="container">
-        <div>
-            <div class="row">
-                <div class="col-md-11 col-lg-11 col-sm-11">
-                  <!-- Nav tabs -->
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#storeInfo" aria-controls="storeInfo" role="tab" data-toggle="tab">Store Information</a></li>
-                    <li role="presentation"><a href="#appConfig" aria-controls="appConfig" role="tab" data-toggle="tab">App Configuration</a></li>
-                    <li role="presentation"><a href="#uiConfig" aria-controls="uiConfig" role="tab" data-toggle="tab">UI Configuration</a></li>
-                  </ul>
-                  <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="storeInfo">
+                <div class="page-header">
+                    <h1>App Information</h1>
                 </div>
-                <div class="col-md-1 col-lg-1 col-sm-1">
-                    <button type="button" class="btn btn-default" disabled="disabled" id="save">Save</button>
+                <div class="row">
+                    <div class="col-md-2 col-lg-2 col-sm-12">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                                      data-placement="bottom"
+                                                      title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                <img class="appIcon" id="appIcon" alt="Application Icon"
+                                     src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5 col-lg-5 col-sm-12">
+                        <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign"
+                                                                data-toggle="tooltip" data-placement="right"
+                                                                title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
+                        <input type="text" class="form-control" id="applicationName" placeholder="Application Name"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-sm-12">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                        <label for="description">Description <span class="glyphicon glyphicon-question-sign"
+                                                                   data-toggle="tooltip" data-placement="right"
+                                                                   title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
+                        <textarea class="form-control" id="description" placeholder="Description" rows="10"></textarea>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="row">
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                                <label for="keywords">Keywords <span class="glyphicon glyphicon-question-sign"
+                                                                     data-toggle="tooltip" data-placement="right"
+                                                                     title="One or more keywords that describe your app. Keywords make App Store search results more accurate. Separate keywords with a comma."/></label>
+                                <input type="text" class="form-control" id="keywords" placeholder="Keywords"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-12 col-lg-12 col-sm-12">
+                                <label for="supportURL">Support URL <span class="glyphicon glyphicon-question-sign"
+                                                                          data-toggle="tooltip" data-placement="right"
+                                                                          title="A URL with support information for your app. This URL will be visible on the App Store."/></label>
+                                <input type="text" class="form-control" id="supportURL" placeholder="Support URL"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-header">
+                    <h1>App Review Information</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="row">
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <label for="firstName">Contact Information <span
+                                        class="glyphicon glyphicon-question-sign" data-toggle="tooltip"
+                                        data-placement="top"
+                                        title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="firstName" placeholder="First Name"/>
+                            </div>
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="lastName" placeholder="Last Name"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number"/>
+                            </div>
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="eMail" placeholder="E-Mail"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-lg-12 col-sm-12">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign"
+                                                                         data-toggle="tooltip" data-placement="top"
+                                                                         title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="userName" placeholder="User Name"/>
+                            </div>
+                            <div class="form-group col-md-6 col-lg-6 col-sm-12">
+                                <input type="text" class="form-control" id="password" placeholder="Password"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-sm-12">
+                        <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign"
+                                                             data-toggle="tooltip" data-placement="right"
+                                                             title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
+                        <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
+                    </div>
                 </div>
             </div>
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="storeInfo">
-                    <div class="page-header">
-                        <h1>App Information</h1>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-2 col-lg-2 col-sm-12">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 col-sm-12">
-                                    <label>App Icon <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="bottom" title="This icon will be used on the App Store and must be in the JPG or PNG format, with a minimum resolution of at least 72 DPI, and in the RGB color space. It must not contain layers or rounded corners."/></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 col-sm-12">
-                                    <img class="appIcon" id="appIcon" alt="Application Icon" src="https://placeholdit.imgix.net/~text?txtsize=30&txt=1024×1024&w=150&h=150" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-md-5 col-lg-5 col-sm-12">
-                            <label for="applicationName">Name <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="The name of your app as it will appear on the App Store. This can't be longer than 255 characters."/></label>
-                            <input type="text" class="form-control" id="applicationName" placeholder="Application Name" />
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-sm-12">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                            <label for="description">Description <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A description of your app, detailing features and functionality. It will also be used for your Apple Watch app."/></label>
-                            <textarea class="form-control" id="description" placeholder="Description" rows="10"></textarea>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-sm-12">
-                            <div class="row">
-                                <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                                    <label for="keywords">Keywords <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="One or more keywords that describe your app. Keywords make App Store search results more accurate. Separate keywords with a comma."/></label>
-                                    <input type="text" class="form-control" id="keywords" placeholder="Keywords" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-12 col-lg-12 col-sm-12">
-                                    <label for="supportURL">Support URL <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="A URL with support information for your app. This URL will be visible on the App Store."/></label>
-                                    <input type="text" class="form-control" id="supportURL" placeholder="Support URL" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="page-header">
-                        <h1>App Review Information</h1>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6 col-sm-12">
-                            <div class="row">
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <label for="firstName">Contact Information <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The person in your organization who should be contacted if the App Review team has any questions or needs additional information."/></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="firstName" placeholder="First Name" />
-                                </div>
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="lastName" placeholder="Last Name" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="phoneNumber" placeholder="Phone Number" />
-                                </div>
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="eMail" placeholder="E-Mail" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 col-sm-12">
-                                    &nbsp;
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <label for="userName">Demo Account <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="top" title="The user name and password for a full-access account for your app. This account is used during the review process and must not expire. Include details for additional accounts in the Notes field."/></label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="userName" placeholder="User Name" />
-                                </div>
-                                <div class="form-group col-md-6 col-lg-6 col-sm-12">
-                                    <input type="text" class="form-control" id="password" placeholder="Password" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-6 col-sm-12">
-                            <label for="reviewNotes">Notes <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" data-placement="right" title="Additional information about your app that can help during the review process. Include information that may be needed to test your app, such as app-specific settings."/></label>
-                            <textarea class="form-control" id="reviewNotes" placeholder="Notes" rows="10"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div role="tabpanel" class="tab-pane" id="appConfig">
-                </div>
-                <div role="tabpanel" class="tab-pane" id="uiConfig">
-                </div>
+            <div role="tabpanel" class="tab-pane" id="appConfig">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="uiConfig">
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
