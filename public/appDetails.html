@@ -24,6 +24,8 @@
             border-radius: 17.54%;
             cursor: pointer;
         }
+
+        body { padding-top: 70px; }
     </style>
 
     <script type="text/javascript">
@@ -43,6 +45,7 @@
 
 
         var ws;
+        var currentAppData;
 
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
@@ -71,7 +74,9 @@
                                 $("#password").val(result.get("review_demo_password"));
                                 $("#reviewNotes").val(result.get("review_notes"));
 
-                                $("#appIcon").attr("src", result.get("large_app_icon"))
+                                $("#appIcon").attr("src", result.get("large_app_icon"));
+
+                                currentAppData = result;
                             },
                             error: function (error) {
                                 alert(error);
@@ -93,52 +98,42 @@
                 $('#save').attr("disabled", "disabled");
             });
 
-
-            var count;
-            var buffer;
-
-            $(".preview").on('click', function (event) {
+            $('.preview').on('click', function(){
                 event.preventDefault();
 
-                count = 0;
-                buffer = '';
-                ws = new WebSocket("ws://127.0.0.1:9090");
-
-                ws.onmessage = function(evt) {
-                    $("#description").val($("#description").val() + evt.data);
-                    $('#description').scrollTop($('#description')[0].scrollHeight);
-                };
-
-                ws.onclose = function() {
-                    if (buffer != ''){
-                        $("#description").val($("#description").val() + buffer);
-                        buffer = '';
-                        $('#description').scrollTop($('#description')[0].scrollHeight);
-                    }
-
-                    $("#description").val( $("#description").val() + "socket closed" + "\r");
-                };
-                ws.onopen = function() {
-                    $("#description").val("connected..." + "\r");
-                    ws.send(JSON.stringify({command: "build", scheme : "Technion"}));
-                };
+                window.location.href = "./preview.html?app_id="+currentAppData.get("apple_id") + "&device=" + $(this).attr('data');
             });
 
             $("#clean").on('click', function (event) {
                 event.preventDefault();
 
-                ws = new WebSocket("ws://127.0.0.1:9090");
+                $("#consoleLogModal").modal('show');
+                $('#closeConsoleLog').attr("disabled", "disabled");
+                $("#consoleLog").val("");
 
-                ws.onmessage = function(evt) {
-                    $("#description").val( $("#description").val() + evt.data);
-                    $('#description').scrollTop($('#description')[0].scrollHeight);
+                ws = new WebSocket("ws://pbeast.asuscomm.com:9090");
+
+                ws.onmessage = function (evt) {
+                    message = JSON.parse(evt.data)
+                    if (message.command == 'log') {
+                        $("#consoleLog").val($("#consoleLog").val() + message.message);
+                        $('#consoleLog').scrollTop($('#consoleLog')[0].scrollHeight);
+                    } else if (message.command == 'result') {
+                        if (message.status == 'success') {
+                            currentAppData.unset("previewPublicKey");
+                            currentAppData.save();
+                        } else {
+                            $("#consoleLog").val($("#consoleLog").val() + "\r" + message.message + " (" + message.exceptionMessage + ")");
+                        }
+                    }
                 };
-                ws.onclose = function() {
-                    $("#description").val( $("#description").val() + "socket closed" + "\r");
+                ws.onclose = function () {
+                    $("#consoleLog").val($("#consoleLog").val() + "\rConnection terminated\r");
+                    $('#closeConsoleLog').removeAttr("disabled");
                 };
-                ws.onopen = function() {
-                    $("#description").val("connected..." + "\r" + "\r");
-                    ws.send(JSON.stringify({command: "clean", scheme : "Technion"}));
+                ws.onopen = function () {
+                    $("#consoleLog").val("Connected to server" + "\r" + "\r");
+                    ws.send(JSON.stringify({command: "clean", scheme: currentAppData.get("scheme")}));
                 };
 
             });
@@ -146,7 +141,7 @@
     </script>
 </head>
 <body>
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -167,11 +162,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Preview <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="preview" data="iPhone 4s">iPhone 4s</a></li>
-                        <li><a href="#" class="preview">iPhone 5</a></li>
-                        <li><a href="#" class="preview">iPhone 5s</a></li>
-                        <li><a href="#" class="preview">iPhone 6</a></li>
-                        <li><a href="#" class="preview">iPhone 6 Plus</a></li>
+                        <li><a href="#" class="preview" data="iphone4s">iPhone 4s</a></li>
+                        <li><a href="#" class="preview" data="iphone5s">iPhone 5s</a></li>
+                        <li><a href="#" class="preview" data="iphone6">iPhone 6</a></li>
+                        <li><a href="#" class="preview" data="iphone6plus">iPhone 6 Plus</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="#" id="clean">Clean</a></li>
                     </ul>
@@ -316,11 +310,31 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-pane" id="appConfig">
+            <div role="tabpanel" class="tab-pane" id="appConfig"></div>
+            <div role="tabpanel" class="tab-pane" id="uiConfig"></div>
+        </div>
+    </div>
+</div>
+<!-- Console -->
+<div class="modal fade" id="consoleLogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Console</h4>
             </div>
-            <div role="tabpanel" class="tab-pane" id="uiConfig">
+            <div class="modal-body">
+                <textarea style='background-color: black; color: lightgreen;font-family: monaco,Consolas,"Lucida Console",monospace'  class="form-control" id="consoleLog" rows="15" readonly>
+
+                </textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" disabled="disabled" id="closeConsoleLog">Close</button>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>
