@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'parse-ruby-client', git: 'https://github.com/adelevie/parse-ruby-client.git'
+gem 'spaceship'
+gem 'colorize'
+gem "em-websocket"
