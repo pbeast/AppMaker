@@ -10,11 +10,12 @@ require 'securerandom'
 require 'fileutils'
 require 'net/http'
 require "uri"
+require 'timers'
 
 require 'config'
 
 WORKSPACE = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
-PREVIEW_PACKAGES_URL = 'http://a1fde39c.ngrok.io'
+PREVIEW_PACKAGES_URL = 'http://6a4df400.ngrok.io'
 APPETIZE_API_TOKEN = AppMakerConfig::APPETIZE_API_TOKEN
 WORKFOLDER = File::expand_path("~/Work/AppMaker")
 
@@ -75,8 +76,12 @@ def preparePreview(request, ws)
 
 
     print 'Building...'
-    log(ws, 'info', 'Building. ')
-    log(ws, 'info', 'It can take some time...')
+    log(ws, 'info', 'Building.')
+
+    progressTimer = EventMachine::PeriodicTimer.new(1) do
+      log(ws, 'info', '.')
+    end
+
     #output = `xcodebuild -sdk iphonesimulator -WORKSPACE '#{WORKSPACE}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}'` # > /dev/null 2>&1
 
     output = ''
@@ -92,6 +97,7 @@ def preparePreview(request, ws)
       #puts exit_status
     end
 
+    progressTimer.cancel
     #puts output
 
     result = exit_status.to_i
@@ -114,8 +120,15 @@ def preparePreview(request, ws)
         log(ws, 'info', "Done\r")
 
         print 'Uploading for preview...'
-        log(ws, 'info', 'Uploading for preview...')
+        log(ws, 'info', 'Uploading for preview.')
+
+        progressTimer = EventMachine::PeriodicTimer.new(1) do
+          log(ws, 'info', '.')
+        end
+
         res, response = upload(scheme, PREVIEW_PACKAGES_URL, APPETIZE_API_TOKEN)
+
+        progressTimer.cancel
         if res
           puts "Done"
           log(ws, 'info', "Done\r")
@@ -132,6 +145,7 @@ def preparePreview(request, ws)
         response(ws, 'exception', :message => 'Failed to upload package')
       end
     else
+      progressTimer.cancel
       puts 'Failed'
       log(ws, 'error', "Failed\r")
       response(ws, 'exception', :message => 'Failed to build package')
@@ -147,34 +161,20 @@ def submitNewBuild(request, ws)
   begin
     log(ws, 'info', "Got submitNewBuild command\r")
     t = Thread.new {
-      scheme = request['scheme']
-      tempFolder = File.join(WORKFOLDER, 'Previews', scheme)
-      FileUtils::mkdir_p tempFolder
+      begin
+        scheme = request['scheme']
+        tempFolder = File.join(WORKFOLDER, 'Previews', scheme)
+        FileUtils::mkdir_p tempFolder
 
-      cmd = "xcodebuild -workspace '#{WORKSPACE}' -scheme '#{scheme}' PROFILE=af367fcf-16b5-49c3-9c28-e3d563d7abf9 SIGNING='iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)' -derivedDataPath '#{tempFolder}' -archivePath '#{tempFolder}' archive"
-
-      exit_status = nil
-      log(ws, 'info', "Archiving...")
-      Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
-        while outLine=stdout_and_stderr.gets do
-          #ws.send outLine
-          puts outLine
-        end
-
-        exit_status = thread.value # Process::Status object returned.
-      end
-
-      puts exit_status
-      result = exit_status.to_i
-      #puts result
-
-      if result==0 then
-        log(ws, 'info', "Done\r")
-
-        cmd = "xcodebuild -exportArchive -archivePath '#{tempFolder}/#{scheme}.xcarchive' -exportPath '#{tempFolder}' -exportOptionsPlist '~/Work/AppMaker/exportPList.plist'"
+        cmd = "xcodebuild -workspace '#{WORKSPACE}' -scheme '#{scheme}' PROFILE=af367fcf-16b5-49c3-9c28-e3d563d7abf9 SIGNING='iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)' -derivedDataPath '#{tempFolder}' -archivePath '#{tempFolder}/#{scheme}' archive"
 
         exit_status = nil
-        log(ws, 'info', "Packaging...")
+        log(ws, 'info', "Archiving.")
+
+        progressTimer = EventMachine::PeriodicTimer.new(1) do
+          log(ws, 'info', '.')
+        end
+
         Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
           while outLine=stdout_and_stderr.gets do
             #ws.send outLine
@@ -184,20 +184,59 @@ def submitNewBuild(request, ws)
           exit_status = thread.value # Process::Status object returned.
         end
 
+        progressTimer.cancel
+
         puts exit_status
         result = exit_status.to_i
+        #puts result
+
         if result==0 then
           log(ws, 'info', "Done\r")
-          response(ws, 'success')
+
+
+          ipa = "#{tempFolder}/#{scheme}.ipa"
+          FileUtils.rm_f ipa
+
+          cmd = "xcodebuild -exportArchive -archivePath '#{tempFolder}/#{scheme}.xcarchive' -exportPath '#{tempFolder}/#{scheme}'" # -exportOptionsPlist '~/Work/AppMaker/exportPList.plist'
+
+          exit_status = nil
+          log(ws, 'info', "Packaging.")
+
+          progressTimer = EventMachine::PeriodicTimer.new(1) do
+            log(ws, 'info', '.')
+          end
+
+          Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
+            while outLine=stdout_and_stderr.gets do
+              #ws.send outLine
+              puts outLine
+            end
+
+            exit_status = thread.value # Process::Status object returned.
+          end
+
+          progressTimer.cancel
+
+          puts exit_status
+          result = exit_status.to_i
+          if result==0 then
+            log(ws, 'info', "Done\r")
+            response(ws, 'success')
+          else
+            puts 'Failed'
+            log(ws, 'error', "Failed\r")
+            response(ws, 'exception', :message => 'Failed to export archive')
+          end
         else
           puts 'Failed'
           log(ws, 'error', "Failed\r")
-          response(ws, 'exception', :message => 'Failed to export archive')
+          response(ws, 'exception', :message => 'Failed to build archive')
         end
-      else
-        puts 'Failed'
-        log(ws, 'error', "Failed\r")
-        response(ws, 'exception', :message => 'Failed to build archive')
+        ws.close
+      rescue Exception => e
+        progressTimer.cancel
+        response(ws, 'exception', :message => "Failed to clean", :exceptionMessage => e.message)
+        ws.close
       end
     }
 
@@ -219,7 +258,12 @@ def clean(request, ws)
       cmd = "xcodebuild -sdk iphonesimulator -workspace '#{WORKSPACE}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}' clean"
 
       exit_status = nil
-      log(ws, 'info', "Cleaning...")
+      log(ws, 'info', "Cleaning.")
+
+      progressTimer = EventMachine::PeriodicTimer.new(1) do
+        log(ws, 'info', '.')
+      end
+
       Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
         while outLine=stdout_and_stderr.gets do
           #ws.send outLine
@@ -227,6 +271,8 @@ def clean(request, ws)
 
         exit_status = thread.value # Process::Status object returned.
       end
+
+      progressTimer.cancel
 
       puts exit_status
       log(ws, 'info', "Done\r")
@@ -236,6 +282,7 @@ def clean(request, ws)
     }
     t.run
   rescue Exception => e
+    progressTimer.cancel
     response(ws, 'exception', :message => "Failed to clean", :exceptionMessage => e.message)
     ws.close
   end

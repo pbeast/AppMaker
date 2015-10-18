@@ -103,12 +103,7 @@
                     publicPreviewKey = result.get("previewPublicKey");
                     currentAppData = result;
 
-                    if (publicPreviewKey == undefined || publicPreviewKey == ''){
-                        buildForPreview();
-                    }
-                    else {
-                        showPreview();
-                    }
+                    submitNewBuild();
                 },
                 error: function (error) {
                     alert(error);
@@ -119,23 +114,6 @@
                 event.preventDefault();
 
                 window.location.href = "./appDetails.html?app_id="+currentAppData.get("apple_id");
-            });
-
-            $('.preview').on('click', function(event){
-                event.preventDefault();
-
-                device = $(this).attr('data');
-
-                showPreview();
-            });
-
-            $('.scale').on('click', function(event){
-                event.preventDefault();
-
-
-                scale = parseFloat($(this).attr('data'));
-
-                showPreview();
             });
         });
     </script>
