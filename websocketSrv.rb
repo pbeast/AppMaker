@@ -14,7 +14,7 @@ require "uri"
 require 'config'
 
 WORKSPACE = File::expand_path("~/Work/Rashim/Rashim.xcworkspace")
-PREVIEW_PACKAGES_URL = 'http://6a4df400.ngrok.io'
+PREVIEW_PACKAGES_URL = 'http://a1fde39c.ngrok.io'
 APPETIZE_API_TOKEN = AppMakerConfig::APPETIZE_API_TOKEN
 WORKFOLDER = File::expand_path("~/Work/AppMaker")
 
@@ -143,12 +143,78 @@ def preparePreview(request, ws)
   t.run
 end
 
+def submitNewBuild(request, ws)
+  begin
+    log(ws, 'info', "Got submitNewBuild command\r")
+    t = Thread.new {
+      scheme = request['scheme']
+      tempFolder = File.join(WORKFOLDER, 'Previews', scheme)
+      FileUtils::mkdir_p tempFolder
+
+      cmd = "xcodebuild -workspace '#{WORKSPACE}' -scheme '#{scheme}' PROFILE=af367fcf-16b5-49c3-9c28-e3d563d7abf9 SIGNING='iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)' -derivedDataPath '#{tempFolder}' -archivePath '#{tempFolder}' archive"
+
+      exit_status = nil
+      log(ws, 'info', "Archiving...")
+      Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
+        while outLine=stdout_and_stderr.gets do
+          #ws.send outLine
+          puts outLine
+        end
+
+        exit_status = thread.value # Process::Status object returned.
+      end
+
+      puts exit_status
+      result = exit_status.to_i
+      #puts result
+
+      if result==0 then
+        log(ws, 'info', "Done\r")
+
+        cmd = "xcodebuild -exportArchive -archivePath '#{tempFolder}/#{scheme}.xcarchive' -exportPath '#{tempFolder}' -exportOptionsPlist '~/Work/AppMaker/exportPList.plist'"
+
+        exit_status = nil
+        log(ws, 'info', "Packaging...")
+        Open3.popen2e(cmd) do |stdin, stdout_and_stderr, thread|
+          while outLine=stdout_and_stderr.gets do
+            #ws.send outLine
+            puts outLine
+          end
+
+          exit_status = thread.value # Process::Status object returned.
+        end
+
+        puts exit_status
+        result = exit_status.to_i
+        if result==0 then
+          log(ws, 'info', "Done\r")
+          response(ws, 'success')
+        else
+          puts 'Failed'
+          log(ws, 'error', "Failed\r")
+          response(ws, 'exception', :message => 'Failed to export archive')
+        end
+      else
+        puts 'Failed'
+        log(ws, 'error', "Failed\r")
+        response(ws, 'exception', :message => 'Failed to build archive')
+      end
+    }
+
+    t.run
+  rescue Exception => e
+    response(ws, 'exception', :message => "Failed to clean", :exceptionMessage => e.message)
+    ws.close
+  end
+end
+
 def clean(request, ws)
   begin
     log(ws, 'info', "Got clean command\r")
     t = Thread.new {
       scheme = request['scheme']
       tempFolder = File.join(WORKFOLDER, 'Previews', scheme)
+      FileUtils::mkdir_p tempFolder
 
       cmd = "xcodebuild -sdk iphonesimulator -workspace '#{WORKSPACE}' -scheme '#{scheme}' -configuration Release -derivedDataPath '#{tempFolder}' clean"
 
@@ -207,6 +273,8 @@ EM.run {
             clean(request, ws)
           elsif (request['command'] == "preparePreview")
             preparePreview(request, ws)
+          elsif (request['command'] == "submitNewBuild")
+            submitNewBuild(request, ws)
           else
             puts 'Error: Unknown command'.red
             response(ws, 'error', :message => 'Unknown command')

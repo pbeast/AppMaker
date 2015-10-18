@@ -46,7 +46,8 @@
 
         var ws;
         var currentAppData;
-
+        var buildServerURI = "ws://pbeast.asuscomm.com:9090";
+        
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -117,7 +118,7 @@
                 $('#closeConsoleLog').attr("disabled", "disabled");
                 $("#consoleLog").val("");
 
-                ws = new WebSocket("ws://pbeast.asuscomm.com:9090");
+                ws = new WebSocket(buildServerURI);
 
                 ws.onmessage = function (evt) {
                     message = JSON.parse(evt.data)

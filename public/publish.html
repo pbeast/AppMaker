@@ -40,28 +40,9 @@
 
         var ws;
         var currentAppData;
-        var publicPreviewKey;
-        var device;
-        var scale = 0.5;
+        var buildServerURI = "ws://127.0.0.1:9090";
 
-        var deviceMap = {};
-        deviceMap ["iphone4s"] = {width : "370", height : "733"};
-        deviceMap ["iphone5s"] = {width:"365", height:"782"};
-        deviceMap ["iphone6"] = {width:"416", height:"870"};
-        deviceMap ["iphone6plus"] = {width:"690", height:"1420"};
-
-        var buildServerURI = "ws://pbeast.asuscomm.com:9090";
-
-
-        var showPreview = function(){
-            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
-
-            iFrame = $(iFrameSrc);
-            $('#previewArea').empty();
-            $('#previewArea').append(iFrame);
-        }
-
-        var buildForPreview = function(){
+        var submitNewBuild = function(){
 
             $("#consoleLogModal").modal('show');
             $('#closeConsoleLog').attr("disabled", "disabled");
@@ -76,13 +57,9 @@
                     $('#consoleLog').scrollTop($('#consoleLog')[0].scrollHeight);
                 } else if (message.command == 'result') {
                     if (message.status == 'success') {
-                        publicPreviewKey = message.data.publicKey;
-                        currentAppData.set("previewPublicKey", publicPreviewKey);
-                        currentAppData.save();
 
-                        showPreview();
-
-                        $('#consoleLogModal').modal('hide');
+                    $('#closeConsoleLog').removeAttr("disabled");
+//                        $('#consoleLogModal').modal('hide');
                     } else if (message.command == 'error') {
                         $("#consoleLog").val($("#consoleLog").val() + "\r" + message.message + " (" + message.exceptionMessage + ")");
                     }
@@ -99,7 +76,7 @@
             };
             ws.onopen = function () {
                 $("#consoleLog").val("Connected to server" + "\r" + "\r");
-                ws.send(JSON.stringify({command: "preparePreview", scheme: currentAppData.get("scheme")}));
+                ws.send(JSON.stringify({command: "submitNewBuild", scheme: currentAppData.get("scheme")}));
             };
         };
 
@@ -178,34 +155,11 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Scale <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="scale" data="0.25">25%</a></li>
-                            <li><a href="#" class="scale" data="0.5">50%</a></li>
-                            <li><a href="#" class="scale" data="0.75">75%</a></li>
-                            <li><a href="#" class="scale" data="1">100%</a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">Device <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" class="preview" data="iphone4s">iPhone 4s</a></li>
-                            <li><a href="#" class="preview" data="iphone5s">iPhone 5s</a></li>
-                            <li><a href="#" class="preview" data="iphone6">iPhone 6</a></li>
-                            <li><a href="#" class="preview" data="iphone6plus">iPhone 6 Plus</a></li>
-                        </ul>
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
     <div class="container">
-        <div id="previewArea">
-
-        </div>
     </div>
     <!-- Console -->
     <div class="modal fade" id="consoleLogModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
