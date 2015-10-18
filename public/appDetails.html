@@ -104,6 +104,12 @@
                 window.location.href = "./preview.html?app_id="+currentAppData.get("apple_id") + "&device=" + $(this).attr('data');
             });
 
+            $('#publish').on('click', function(){
+                event.preventDefault();
+
+                window.location.href = "./publish.html?app_id="+currentAppData.get("apple_id")
+            });
+
             $("#clean").on('click', function (event) {
                 event.preventDefault();
 
