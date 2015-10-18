@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:padding-top="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>App Maker - Application Preview</title>
@@ -17,9 +17,46 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
     <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
 
     <style>
         body { padding-top: 70px; }
+        .grid-item {
+            width: 200px !important;
+            margin-left: 10px;
+        }
+
+        .appIcon_ {
+            -webkit-font-smoothing: antialiased;
+            -webkit-mask-image: url(https://itunesconnect.apple.com/itc/images/layoutelements/ios7-icon.svg);
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-size: 100% 100%;
+            background-size: 100% 100%;
+            border-color: rgb(0, 136, 255);
+            border-radius: 17.544%;
+            border-style: none;
+            border-width: 0px;
+            box-sizing: border-box;
+            color: rgb(0, 136, 255);
+            cursor: pointer;
+            display: block;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-size: 15px;
+            font-stretch: normal;
+            font-style: normal;
+            font-variant: normal;
+            font-weight: 300;
+            line-height: 15px;
+            list-style-image: none;
+            list-style-position: outside;
+            list-style-type: none;
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+            text-rendering: optimizeLegibility;
+            vertical-align: baseline;
+            width: 150px;
+        }
     </style>
 
     <script>
@@ -38,11 +75,13 @@
         }
 
 
+        var $masonry = {};
+
         var ws;
         var currentAppData;
         var publicPreviewKey;
         var device;
-        var scale = 0.5;
+        var scale = 0.75;
 
         var deviceMap = {};
         deviceMap ["iphone4s"] = {width : "370", height : "733"};
@@ -54,7 +93,7 @@
 
 
         var showPreview = function(){
-            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
+            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
 
             iFrame = $(iFrameSrc);
             $('#previewArea').empty();
@@ -106,6 +145,30 @@
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
 
+            $masonry['iphone4s'] = $('.snapShotsGrid_iphone4s').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 210
+            });
+
+            $masonry['iphone5s'] = $('.snapShotsGrid_iphone5s').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 210
+            });
+
+            $masonry['iphone6'] = $('.snapShotsGrid_iphone6').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 210
+            });
+
+            $masonry['iphone6plus'] = $('.snapShotsGrid_iphone6plus').masonry({
+                // options
+                itemSelector: '.grid-item',
+                columnWidth: 210
+            });
+
             Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
 
             var app_id = getUrlVars()["app_id"];
@@ -113,6 +176,8 @@
             device = getUrlVars()["device"];
             if (device == undefined || device == '')
                 device = 'iphone5s'
+
+            $('#deviceTabs a[href="#' + device + '"]').tab('show');
 
             if (app_id == undefined) {
                 window.history.back();
@@ -149,6 +214,8 @@
 
                 device = $(this).attr('data');
 
+                $('#deviceTabs a[href="#' + device + '"]').tab('show');
+
                 showPreview();
             });
 
@@ -160,6 +227,65 @@
 
                 showPreview();
             });
+
+            $('#takeSnapshot').bind('click', function(){
+
+                var ifr = document.querySelector('iframe');
+                ifr.contentWindow.postMessage('getScreenshot', '*');
+            });
+
+            var saveScreenshot = function (){
+                var ifr = document.querySelector('iframe');
+            }
+
+            // Receiving messages from iframe in parent window
+            var messageEventHandler = function(event){
+
+                if(event.data == 'sessionRequested'){
+                    console.log(event.data);
+                }
+
+                else if(event.data == 'userError'){
+                    console.log(event.data);
+                }
+
+                else if(event.data == 'sessionQueued'){
+                    console.log(event.data);
+                }
+
+                else if(event.data == 'appLaunch'){
+                    console.log(event.data);
+                }
+
+                else if(event.data == 'firstFrameReceived'){
+                    console.log(event.data);
+                    $('#takeSnapshot').removeAttr("disabled");
+                }
+
+                else if(event.data == 'timeoutWarning'){
+                    console.log(event.data);
+                }
+
+                else if(event.data == 'sessionEnded'){
+                    console.log(event.data);
+                }
+
+                else if(event.data && event.data.type == 'screenshot'){
+                    console.log(event.data);
+
+                    var snapShot = $('<div class="thumbnail grid-item" />');
+                    var img = $('<img  class="appIcon"/>');
+                    img.attr('src', event.data.data);
+                    snapShot.append(img);
+
+                    $('#'+device).append(snapShot);
+                    $masonry[device].masonry('appended', snapShot);
+
+//                    document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
+                }
+            };
+
+            window.addEventListener('message', messageEventHandler, false);
         });
     </script>
 </head>
@@ -202,9 +328,35 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div id="previewArea">
+    <div class="container-fluent">
+        <div class="row">
+            <div class="col-md-1 col-lg-1 col-sm-0">
 
+            </div>
+            <div id="previewArea" class="col-md-4 col-lg-4 col-sm-12">
+
+            </div>
+            <div class="col-md-7 col-lg-7 col-sm-12">
+                <div class="row">
+                    <div class="col-md-10 col-lg-10 col-sm-10">
+                        <ul class="nav nav-tabs" role="tablist" id="deviceTabs">
+                            <li role="presentation" class="active"><a href="#iphone4s" aria-controls="iphone4s" role="tab" data-toggle="tab">iPhone 4s</a></li>
+                            <li role="presentation"><a href="#iphone5s" aria-controls="iphone5s" role="tab" data-toggle="tab">iPhone 5s</a></li>
+                            <li role="presentation"><a href="#iphone6" aria-controls="iphone6" role="tab" data-toggle="tab">iPhone 6</a></li>
+                            <li role="presentation"><a href="#iphone6plus" aria-controls="iphone6plus" role="tab" data-toggle="tab">iPhone 6 Plus</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-1 col-lg-1 col-sm-1">
+                        <button type="button" class="btn btn-default" id="takeSnapshot">Take snapshot</button>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone4s" id="iphone4s" style="padding-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone5s" id="iphone5s" style="padding-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6" id="iphone6" style="padding-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6plus" id="iphone6plus" style="padding-top:10px;"></div>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Console -->

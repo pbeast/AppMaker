@@ -67,49 +67,6 @@
 
 
         var $masonry;
-        /*
-         var iFrame;
-         var currentScreenshot = 1;
-         var ws;
-
-         function fixedEncodeURIComponent (str) {
-         return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-         return '%' + c.charCodeAt(0).toString(16);
-         });
-         }
-
-         var previewBuild = function(){
-
-         var scheme = $(this).attr("data");
-
-         $('#takeScreenshot').hide();
-         $('#previewArea').empty();
-         $('#previewArea').append('<div class="alert alert-success" role="alert">It takes some time, so meanwhile watch some...</div>');
-         $('#previewArea').append('<iframe src="http://giphy.com/embed/oDDEfZkth8Xe0?html5=true" width="480" height="319" frameborder="0" class="giphy-embed" allowfullscreen=""></iframe>');
-
-
-         $.ajax('http://127.0.0.1:1234/build/'+fixedEncodeURIComponent(scheme), {
-         timeout: 60*1000*3,
-         success: function(result){
-         var obj = jQuery.parseJSON(result);
-         var iFrameSrc = '<iframe src="https://appetize.io/embed/' + obj.publicKey + '?device=iphone5s&scale=75&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="274px" height="587px" frameborder="0" scrolling="no"></iframe>';
-
-         iFrame = $(iFrameSrc);
-         $('#previewArea').empty();
-         $('#previewArea').append(iFrame);
-         },
-         error: function(e){
-         $('#previewArea').empty();
-         $('#previewArea').append('<div class="alert alert-danger" role="alert">Oh shit...' + e.statusText + '</div>');
-         $('#previewArea').append('<iframe src="http://giphy.com/embed/33iqmp5ATXT5m?html5=true" width="480" height="204" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="http://giphy.com/gifs/sad-depressed-disappointed-33iqmp5ATXT5m">via GIPHY</a></p>');
-
-
-         }
-         });
-         }
-
-         function debug(str){ $("#debug").append("<p>"+str+"</p>"); };
-         */
 
         $(document).ready(function () {
 
@@ -161,102 +118,9 @@
                     $('.grid-item').filter(function () {
                         return $(this).attr("data").toLowerCase().indexOf(filter.toLowerCase()) > -1;
                     }).show();
-                    //var selector = '.grid-item[data*="' + filter + '"]';
-                    //$(selector).show();
                     $masonry.masonry('layout');
                 }
             });
-
-            /*
-             ws = new WebSocket("ws://127.0.0.1:9090/websocket");
-             ws.onmessage = function(evt) {
-             debug("&lt;&lt;&lt; " + evt.data);
-             };
-             ws.onclose = function() { debug("socket closed"); };
-             ws.onopen = function() {
-             debug("connected...");
-             };
-
-
-             $('#takeScreenshot').bind('click', function(){
-
-             if (ws != undefined){
-             debug("&gt;&gt;&gt; hello server");
-             ws.send("hello server");
-             }
-
-             return;
-             */
-
-            /*
-             var ifr = document.querySelector('iframe');
-             ifr.contentWindow.postMessage('getScreenshot', '*');
-             });
-
-             var saveScreenshot = function (){
-             var ifr = document.querySelector('iframe');
-             }
-
-             // Receiving messages from iframe in parent window
-             var messageEventHandler = function(event){
-
-             if(event.data == 'sessionRequested'){
-             console.log(event.data);
-             }
-
-             else if(event.data == 'userError'){
-             console.log(event.data);
-             }
-
-             else if(event.data == 'sessionQueued'){
-             console.log(event.data);
-             }
-
-             else if(event.data == 'appLaunch'){
-             console.log(event.data);
-             }
-
-             else if(event.data == 'firstFrameReceived'){
-             console.log(event.data);
-             $('#takeScreenshot').show();
-             }
-
-             else if(event.data == 'timeoutWarning'){
-             console.log(event.data);
-             }
-
-             else if(event.data == 'sessionEnded'){
-             console.log(event.data);
-             }
-
-             else if(event.data && event.data.type == 'screenshot'){
-             console.log(event.data);
-             document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
-
-             currentScreenshot++;
-             if (currentScreenshot > 4)
-             currentScreenshot = 1;
-             }
-             };
-             window.addEventListener('message', messageEventHandler, false);
-
-             $('#takeScreenshot').hide();
-
-             $.ajax('http://127.0.0.1:1234/schemes', {
-             success: function(result){
-             $.each(result, function(i, v){
-             $('#schemes').append($('<tr><td>' + v + '</td><td><button type="button" class="btn btn-primary buildAndPreview" data="' + v +'">Build & Preview</button></td></tr>'));
-             });
-
-             $('.buildAndPreview').on('click', previewBuild);
-
-             },
-             error: function(e){
-             alert('Error:' + e);
-             }
-             });
-
-             */
         });
     </script>
 </head>
