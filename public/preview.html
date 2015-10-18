@@ -50,6 +50,8 @@
         deviceMap ["iphone6"] = {width:"416", height:"870"};
         deviceMap ["iphone6plus"] = {width:"690", height:"1420"};
 
+        var buildServerURI = "ws://pbeast.asuscomm.com:9090";
+
 
         var showPreview = function(){
             var iFrameSrc = '<iframe src="https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
@@ -65,7 +67,7 @@
             $('#closeConsoleLog').attr("disabled", "disabled");
             $("#consoleLog").val("");
 
-            ws = new WebSocket("ws://pbeast.asuscomm.com:9090");
+            ws = new WebSocket(buildServerURI);
 
             ws.onmessage = function (evt) {
                 message = JSON.parse(evt.data)
