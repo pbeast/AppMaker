@@ -18,12 +18,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
     <script type="text/javascript" src="https://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
 
     <style>
         body { padding-top: 70px; }
         .grid-item {
-            width: 200px !important;
+            width: 250px !important;
             margin-left: 10px;
+            cursor: pointer;
         }
 
         .appIcon_ {
@@ -55,7 +57,6 @@
             text-align: center;
             text-rendering: optimizeLegibility;
             vertical-align: baseline;
-            width: 150px;
         }
     </style>
 
@@ -93,7 +94,15 @@
 
 
         var showPreview = function(){
-            var iFrameSrc = '<iframe src="https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
+
+            iFrameUrl = 'https://appetize.io/embed/' + publicPreviewKey + '?device=' + device + '&scale='+ (scale * 100).toString() + '&autoplay=true&orientation=portrait&deviceColor=black&xdocMsg=true';
+
+            var userName = currentAppData.get("review_demo_user");
+            var password = currentAppData.get("review_demo_password");
+            if (userName != undefined && password != undefined)
+                iFrameUrl += "&params=" + encodeURIComponent(JSON.stringify({"userName" : userName, "password": password}));
+
+            var iFrameSrc = '<iframe src="' + iFrameUrl + '" width="' + deviceMap[device].width * scale + 'px" height="' + deviceMap[device].height * scale + 'px" frameborder="0" scrolling="no"></iframe>'
 
             iFrame = $(iFrameSrc);
             $('#previewArea').empty();
@@ -117,7 +126,10 @@
                     if (message.status == 'success') {
                         publicPreviewKey = message.data.publicKey;
                         currentAppData.set("previewPublicKey", publicPreviewKey);
+                        currentAppData.set("previewPrivateKey", message.data.privateKey);
                         currentAppData.save();
+
+                        $("#shareLink").val("https://appetize.io/app/" + publicPreviewKey);
 
                         showPreview();
 
@@ -138,35 +150,42 @@
             };
             ws.onopen = function () {
                 $("#consoleLog").val("Connected to server" + "\r" + "\r");
-                ws.send(JSON.stringify({command: "preparePreview", scheme: currentAppData.get("scheme")}));
+                ws.send(JSON.stringify({command: "preparePreview", scheme: currentAppData.get("scheme"), privateKey: currentAppData.get("previewPrivateKey")}));
             };
         };
 
         $(document).ready(function () {
+
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.indexOf('safari') != -1) {
+                $(".copyToClipboard").attr("data-toggle", "tooltip");
+            }
+
             $('[data-toggle="tooltip"]').tooltip();
+            new Clipboard('.copyToClipboard');
 
             $masonry['iphone4s'] = $('.snapShotsGrid_iphone4s').masonry({
                 // options
                 itemSelector: '.grid-item',
-                columnWidth: 210
+                columnWidth: 260
             });
 
             $masonry['iphone5s'] = $('.snapShotsGrid_iphone5s').masonry({
                 // options
                 itemSelector: '.grid-item',
-                columnWidth: 210
+                columnWidth: 260
             });
 
             $masonry['iphone6'] = $('.snapShotsGrid_iphone6').masonry({
                 // options
                 itemSelector: '.grid-item',
-                columnWidth: 210
+                columnWidth: 260
             });
 
             $masonry['iphone6plus'] = $('.snapShotsGrid_iphone6plus').masonry({
                 // options
                 itemSelector: '.grid-item',
-                columnWidth: 210
+                columnWidth: 260
             });
 
             Parse.initialize("svGqYa9l2DYSLduyvo1ICgRwwHzhhSCEVUIGDnLi", "DUSNGLVKvwWOghh4Cta9VF8m3VHPU47jRZRBpSpk");
@@ -190,6 +209,8 @@
                 success: function (result) {
                     publicPreviewKey = result.get("previewPublicKey");
                     currentAppData = result;
+
+                    $("#shareLink").val("https://appetize.io/app/" + publicPreviewKey);
 
                     if (publicPreviewKey == undefined || publicPreviewKey == ''){
                         buildForPreview();
@@ -273,14 +294,16 @@
                 else if(event.data && event.data.type == 'screenshot'){
                     console.log(event.data);
 
-                    var snapShot = $('<div class="thumbnail grid-item" />');
-                    var img = $('<img  class="appIcon"/>');
+                    var snapShot = $('<a class="thumbnail grid-item" />');
+                    var img = $('<img  class="appIcon img-thumbnail"/>');
                     img.attr('src', event.data.data);
                     snapShot.append(img);
 
                     $('#'+device).append(snapShot);
                     $masonry[device].masonry('appended', snapShot);
-
+                    setTimeout(function () {
+                        $masonry[device].masonry('layout');
+                    }, 100);
 //                    document.getElementById("screenshot" + currentScreenshot).src = event.data.data;
                 }
             };
@@ -304,6 +327,7 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a type="button" data-toggle="modal" data-target="#sharePreviewModal" style="cursor: pointer;">Share Preview</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">Scale <span class="caret"></span></a>
@@ -351,10 +375,10 @@
                     </div>
                 </div>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone4s" id="iphone4s" style="padding-top:10px;"></div>
-                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone5s" id="iphone5s" style="padding-top:10px;"></div>
-                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6" id="iphone6" style="padding-top:10px;"></div>
-                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6plus" id="iphone6plus" style="padding-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone4s" id="iphone4s" style="margin-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone5s" id="iphone5s" style="margin-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6" id="iphone6" style="margin-top:10px;"></div>
+                    <div role="tabpanel" class="tab-pane row snapShotsGrid_iphone6plus" id="iphone6plus" style="margin-top:10px;"></div>
                 </div>
             </div>
         </div>
@@ -375,6 +399,29 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" disabled="disabled" id="closeConsoleLog">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Share Preview -->
+    <div class="modal fade" id="sharePreviewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">Share Preview</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" aria-label="Copy" id="shareLink" readonly>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default copyToClipboard" aria-label="Copy" data-clipboard-target="#shareLink" title="Press ⌘-c to copy"><span class="glyphicon glyphicon-copy"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="closeShareDialog">Close</button>
                 </div>
             </div>
         </div>

@@ -29,7 +29,7 @@ def response(ws, status, **args)
   ws.send resp.to_json
 end
 
-def upload(scheme, previewsLocation, appetizeApiToken)
+def upload(scheme, previewsLocation, appetizeApiToken, privateKey)
 
   begin
     url = "#{previewsLocation}/#{scheme}/Build/Products/Release-iphonesimulator/#{scheme}.zip"
@@ -39,7 +39,12 @@ def upload(scheme, previewsLocation, appetizeApiToken)
     uri = URI('https://api.appetize.io/v1/app/update')
     req = Net::HTTP::Post.new(uri, initheader = {'Content-Type' =>'application/json'})
 
-    body = { :token => appetizeApiToken, :url => url, :platform => 'ios' }.to_json
+    if (privateKey.nil?)
+      body = { :token => appetizeApiToken, :url => url, :platform => 'ios' }.to_json
+    else
+      body = { :token => appetizeApiToken, :url => url, :platform => 'ios', :privateKey => privateKey }.to_json
+    end
+
     req.body = body
 
     response = Net::HTTP.start(uri.host, uri.port, :use_ssl => true) do |http|
@@ -69,7 +74,10 @@ end
 def preparePreview(request, ws)
   log(ws, 'info', "Got preparePreview command\r")
   t = Thread.new() {
+
     scheme = request['scheme']
+    privateKey = request['privateKey']
+
     curDir = Dir.pwd
     tempFolder = File.join(WORKFOLDER, 'Previews', scheme)
     FileUtils::mkdir_p tempFolder
@@ -126,7 +134,7 @@ def preparePreview(request, ws)
           log(ws, 'info', '.')
         end
 
-        res, response = upload(scheme, PREVIEW_PACKAGES_URL, APPETIZE_API_TOKEN)
+        res, response = upload(scheme, PREVIEW_PACKAGES_URL, APPETIZE_API_TOKEN, privateKey)
 
         progressTimer.cancel
         if res
