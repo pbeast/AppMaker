@@ -39,13 +39,12 @@ version = app.edit_version
 builds = version.candidate_builds
 puts '------------------------------------------'.green
 builds.each do |build|
-   puts "#{build.app_name} #{build.train_version}(#{build.build_version}) - #{build.processing ? 'processing' : 'ready'}"
-#puts build
-   puts '------------------------------------------'.green
+  puts "#{build.app_name} #{build.train_version}(#{build.build_version}) - #{build.processing ? 'processing' : 'ready'}"
+  #puts build
+  puts '------------------------------------------'.green
 end
 
 #version.select_build(builds.first)
 #version.save!
 
 puts 'Done'
-
