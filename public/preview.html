@@ -324,6 +324,12 @@
 
             $('#takeSnapshot').bind('click', function(){
 
+                var c = $('.snapShotsGrid_'+device).children().length;
+                if (c >= 5){
+                    alert("You can take maximum five screenshots.");
+                    return;
+                }
+
                 var ifr = document.querySelector('iframe');
                 ifr.contentWindow.postMessage('getScreenshot', '*');
             });
@@ -416,6 +422,11 @@
                     }
             );
 
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var dev = $(e.target).attr('aria-controls');
+                $masonry[dev].masonry('layout');
+                //e.relatedTarget // previous active tab
+            })
 
             window.addEventListener('message', messageEventHandler, false);
         });
