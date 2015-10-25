@@ -263,6 +263,9 @@
                     var type = src.substring(5, src.indexOf(";"));
                     var fileData = src.substr(src.indexOf("4") + 2);
 
+                    $("#consoleLog").val($("#consoleLog").val() + "Saving screenshot for " + screenShotDevice + "\r");
+                    $('#consoleLog').scrollTop($('#consoleLog')[0].scrollHeight);
+
                     var parseFile = new Parse.File("screenshot.jpg", {"base64": fileData});
                     parseFile.save().then(function (file) {
                         var Screenshot = Parse.Object.extend("Screenshot");
@@ -290,6 +293,7 @@
                     if (screenShotsSaveingIndex < screenShots.length)
                         saveNextScreenShot();
                     else
+                        $('#consoleLogModal').modal('hide');
                         window.location.href = "./appDetails.html?app_id="+currentAppData.get("apple_id");
                 }
             }
@@ -299,8 +303,18 @@
                 event.preventDefault();
 
                 screenShots = $('.screenshot');
-                screenShotsSaveingIndex = 0;
-                saveNextScreenShot();
+                if (screenShots.length > 0) {
+                    $("#consoleLogModal").modal('show');
+                    $('#closeConsoleLog').attr("disabled", "disabled");
+                    $("#consoleLog").val("");
+
+                    screenShotsSaveingIndex = 0;
+                    saveNextScreenShot();
+                }
+                else{
+                    $('#consoleLogModal').modal('hide');
+                    window.location.href = "./appDetails.html?app_id="+currentAppData.get("apple_id");
+                }
             });
 
             $('.preview').on('click', function(event){
@@ -512,7 +526,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Console</h4>
+                    <h4 class="modal-title">Console</h4>
                 </div>
                 <div class="modal-body">
                     <textarea style='background-color: black; color: lightgreen;font-family: monaco,Consolas,"Lucida Console",monospace'  class="form-control" id="consoleLog" rows="15" readonly>
@@ -532,7 +546,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">Share Preview</h4>
+                    <h4 class="modal-title">Share Preview</h4>
                 </div>
                 <div class="modal-body">
                     <div class="input-group">
