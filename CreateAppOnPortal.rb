@@ -4,6 +4,7 @@ $LOAD_PATH << '.'
 
 require 'spaceship'
 require 'openssl'
+require 'fileutils'
 
 require 'config'
 
@@ -37,6 +38,8 @@ client.team_id = 'P2WQ65BAA8'
 #  puts app
 #end
 
+FileUtils::mkdir_p appName
+
 app = Spaceship.app.find(app_id)
 if !app.nil?
   puts 'Application already exists:'
@@ -46,12 +49,12 @@ if !app.nil?
 
   devices = Spaceship::Device.all
 
-devCerts = Spaceship.certificate.development.all
-puts 'got devCerts'
+  devCerts = Spaceship.certificate.development.all
+  puts 'got devCerts'
 
-profile = Spaceship.provisioning_profile.development.create!(bundle_id: app_id, certificate: devCerts, name: appName + ' Development')
-File.write(appName + ' Development.mobileprovision', profile.download)
-puts "Development provisioning profile created: #{profile.name}"
+  profile = Spaceship.provisioning_profile.development.create!(bundle_id: app_id, certificate: devCerts, name: appName + ' Development')
+  File.write(appName + '/' + appName + ' Development.mobileprovision', profile.download)
+  puts "Development provisioning profile created: #{profile.name}"
 
   exit
 end
@@ -69,7 +72,7 @@ prodCert = Spaceship.certificate.production_push.create!(csr: prod_csr, bundle_i
 
 prod_pfx = OpenSSL::PKCS12.create('Abcd1234', app_id, prod_pkey, prodCert.download)
 
-File.open(appNameJoined + '_Production_Push.p12', 'w') {
+File.open(appName + '/' + appNameJoined + '_Production_Push.p12', 'w') {
   |f| f.write(prod_pfx.to_der)
 }
 
@@ -83,7 +86,7 @@ devCert = Spaceship.certificate.development_push.create!(csr: dev_csr, bundle_id
 
 dev_pfx = OpenSSL::PKCS12.create('Abcd1234', app_id, dev_pkey, devCert.download)
 
-File.open(appNameJoined + '_Development_Push.p12', 'w') {
+File.open(appName + '/' + appNameJoined + '_Development_Push.p12', 'w') {
   |f| f.write(dev_pfx.to_der)
 }
 
@@ -91,10 +94,10 @@ puts 'Development push certificate stored to ' + appNameJoined + '_Development_P
 
 devCerts = Spaceship.certificate.development.all
 profile = Spaceship.provisioning_profile.development.create!(bundle_id: app_id, certificate: devCerts, name: appName + ' Development')
-File.write(appName + ' Development.mobileprovision', profile.download)
+File.write(appName + '/' + appName + ' Development.mobileprovision', profile.download)
 puts "Development provisioning profile created: #{profile.name}"
 
 prodCert = Spaceship.certificate.production.all.first
 productionProfile = Spaceship.provisioning_profile.app_store.create!(bundle_id: app_id, certificate: prodCert, name: appName + ' Production')
-File.write(appName + ' Production.mobileprovision', productionProfile.download)
+File.write(appName + '/' + appName + ' Production.mobileprovision', productionProfile.download)
 puts "Production provisioning profile created: #{productionProfile.name}"
