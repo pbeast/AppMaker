@@ -1,0 +1,13 @@
+PODS:
+  - GBCli (1.1)
+  - XcodeEditor (1.6.4)
+
+DEPENDENCIES:
+  - GBCli
+  - XcodeEditor
+
+SPEC CHECKSUMS:
+  GBCli: e5f988fadb68e1e3c01919f134009fed9796fde0
+  XcodeEditor: c6a79b32b89c86c793d15049a49e96dfd0749351
+
+COCOAPODS: 0.39.0

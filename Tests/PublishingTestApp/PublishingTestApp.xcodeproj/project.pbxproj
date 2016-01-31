@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3855BDA81C5E2C7C00E2992C /* shutdown.png in Resources */ = {isa = PBXBuildFile; fileRef = 3855BDA21C5E2B8B00E2992C /* shutdown.png */; };
 		ADD62019AF32150DE092ACEF /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 416E1CF2E80ECF510E8D4514 /* libPods.a */; };
 		EC4561A81BC90F3D0070B0CC /* app-120.png in Resources */ = {isa = PBXBuildFile; fileRef = EC4561A51BC90F3D0070B0CC /* app-120.png */; };
 		EC4561A91BC90F3D0070B0CC /* app.png in Resources */ = {isa = PBXBuildFile; fileRef = EC4561A61BC90F3D0070B0CC /* app.png */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3855BDA21C5E2B8B00E2992C /* shutdown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shutdown.png; sourceTree = "<group>"; };
 		416E1CF2E80ECF510E8D4514 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		94B124F8F69F2A22737CB121 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		CF15EB93E4252FF570A3A0B0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -27,8 +29,8 @@
 		EC4561A61BC90F3D0070B0CC /* app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app.png; sourceTree = "<group>"; };
 		EC4561A71BC90F3D0070B0CC /* app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app@2x.png"; sourceTree = "<group>"; };
 		EC4561BE1BC91C6F0070B0CC /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
-		EC55F1F21BA98B5D006C987C /* publishingTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = publishingTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EC55F1F61BA98B5D006C987C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC55F1F21BA98B5D006C987C /* NewProduct.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = NewProduct.app; path = Test1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC55F1F61BA98B5D006C987C /* PublishingTestApp.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PublishingTestApp.plist; sourceTree = "<group>"; };
 		EC55F1F71BA98B5D006C987C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EC55F1F91BA98B5D006C987C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		EC55F1FA1BA98B5D006C987C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -50,6 +52,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3855BDA11C5E2B8000E2992C /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				3855BDA21C5E2B8B00E2992C /* shutdown.png */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
 		AE313F9DF5BB1854AFE7359A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -98,7 +108,7 @@
 		EC55F1F31BA98B5D006C987C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EC55F1F21BA98B5D006C987C /* publishingTestApp.app */,
+				EC55F1F21BA98B5D006C987C /* NewProduct.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -106,6 +116,7 @@
 		EC55F1F41BA98B5D006C987C /* PublishingTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				3855BDA11C5E2B8000E2992C /* Graphics */,
 				EC4561AB1BC916650070B0CC /* Splash */,
 				EC4561A41BC90DA80070B0CC /* AppIcons */,
 				EC55F1F91BA98B5D006C987C /* AppDelegate.h */,
@@ -122,7 +133,7 @@
 		EC55F1F51BA98B5D006C987C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EC55F1F61BA98B5D006C987C /* Info.plist */,
+				EC55F1F61BA98B5D006C987C /* PublishingTestApp.plist */,
 				EC55F1F71BA98B5D006C987C /* main.m */,
 			);
 			name = "Supporting Files";
@@ -135,6 +146,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EC55F2151BA98B5D006C987C /* Build configuration list for PBXNativeTarget "publishingTestApp" */;
 			buildPhases = (
+				3855BDA71C5E2C4000E2992C /* Copy Target Files */,
 				9AB17039169AE66E9019DBB0 /* Check Pods Manifest.lock */,
 				EC55F1EE1BA98B5D006C987C /* Sources */,
 				EC55F1EF1BA98B5D006C987C /* Frameworks */,
@@ -148,7 +160,7 @@
 			);
 			name = publishingTestApp;
 			productName = PublishingTestApp;
-			productReference = EC55F1F21BA98B5D006C987C /* publishingTestApp.app */;
+			productReference = EC55F1F21BA98B5D006C987C /* NewProduct.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -189,6 +201,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3855BDA81C5E2C7C00E2992C /* shutdown.png in Resources */,
 				EC55F2011BA98B5D006C987C /* Main.storyboard in Resources */,
 				EC4561BF1BC91C6F0070B0CC /* Default-568h.png in Resources */,
 				EC4561A81BC90F3D0070B0CC /* app-120.png in Resources */,
@@ -201,6 +214,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3855BDA71C5E2C4000E2992C /* Copy Target Files */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Target Files";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo $TARGET_NAME";
+		};
 		8FF5CC240DE04BAE1705F65A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -367,12 +394,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 94B124F8F69F2A22737CB121 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = $SIGNING;
-				INFOPLIST_FILE = PublishingTestApp/Info.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Yankelevich (UCERH6TMLJ)";
+				INFOPLIST_FILE = "$(SRCROOT)/PublishingTestApp/PublishingTestApp.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PY.testSpaceshipApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = $PROFILE;
+				PRODUCT_NAME = Test1;
+				PROVISIONING_PROFILE = "66522230-aa17-4371-badb-754fc5190cbb";
 			};
 			name = Debug;
 		};
@@ -380,12 +407,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CF15EB93E4252FF570A3A0B0 /* Pods.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = $SIGNING;
-				INFOPLIST_FILE = PublishingTestApp/Info.plist;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Pavel Yankelevich (UCERH6TMLJ)";
+				INFOPLIST_FILE = "$(SRCROOT)/PublishingTestApp/PublishingTestApp.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PY.testSpaceshipApp;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = $PROFILE;
+				PRODUCT_NAME = Test1;
+				PROVISIONING_PROFILE = "66522230-aa17-4371-badb-754fc5190cbb";
 			};
 			name = Release;
 		};
