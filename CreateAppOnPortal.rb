@@ -95,9 +95,11 @@ puts 'Development push certificate stored to ' + appNameJoined + '_Development_P
 devCerts = Spaceship.certificate.development.all
 profile = Spaceship.provisioning_profile.development.create!(bundle_id: app_id, certificate: devCerts, name: appName + ' Development')
 File.write(appName + '/' + appName + ' Development.mobileprovision', profile.download)
-puts "Development provisioning profile created: #{profile.name}"
+puts "Development provisioning profile created: #{profile.name}; id: #{profile.uuid}"
 
 prodCert = Spaceship.certificate.production.all.first
 productionProfile = Spaceship.provisioning_profile.app_store.create!(bundle_id: app_id, certificate: prodCert, name: appName + ' Production')
 File.write(appName + '/' + appName + ' Production.mobileprovision', productionProfile.download)
-puts "Production provisioning profile created: #{productionProfile.name}"
+puts "Production provisioning profile created: #{productionProfile.name}; id: #{productionProfile.uuid}"
+
+#/Users/pbeast/Library/MobileDevice/Provisioning\ Profiles
