@@ -32,6 +32,8 @@ puts app.app_id
 puts app.name
 puts app.bundle_id
 
+FileUtils::mkdir_p app.name
+
 appNameJoined = app.name.split(' ').join
 
 # Create a new certificate signing request
@@ -42,11 +44,11 @@ prodCert = Spaceship.certificate.production_push.create!(csr: prod_csr, bundle_i
 
 prod_pfx = OpenSSL::PKCS12.create('Abcd1234', app_id, prod_pkey, prodCert.download)
 
-File.open(appNameJoined + '_Production_Push.p12', 'w') {
+File.open(app.name + '/' + appNameJoined + '_Production_Push.p12', 'w') {
   |f| f.write(prod_pfx.to_der)
 }
 
-puts 'Production push certificate stored to ' + appNameJoined + '_Production_Push.p12'
+puts 'Production push certificate stored to ' + app.name + '/' + appNameJoined + '_Production_Push.p12'
 
 # Create a new certificate signing request
 dev_csr, dev_pkey = Spaceship.certificate.create_certificate_signing_request
@@ -56,7 +58,7 @@ devCert = Spaceship.certificate.development_push.create!(csr: dev_csr, bundle_id
 
 dev_pfx = OpenSSL::PKCS12.create('Abcd1234', app_id, dev_pkey, devCert.download)
 
-File.open(appNameJoined + '_Development_Push.p12', 'w') {
+File.open(app.name + '/' + appNameJoined + '_Development_Push.p12', 'w') {
   |f| f.write(dev_pfx.to_der)
 }
-puts 'Development push certificate stored to ' + appNameJoined + '_Development_Push.p12'
+puts 'Development push certificate stored to ' + app.name + '/' + appNameJoined + '_Development_Push.p12'
