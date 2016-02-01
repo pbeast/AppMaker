@@ -29,7 +29,7 @@
 		EC4561A61BC90F3D0070B0CC /* app.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app.png; sourceTree = "<group>"; };
 		EC4561A71BC90F3D0070B0CC /* app@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "app@2x.png"; sourceTree = "<group>"; };
 		EC4561BE1BC91C6F0070B0CC /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
-		EC55F1F21BA98B5D006C987C /* Test1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Test1.app; path = "New Target.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC55F1F21BA98B5D006C987C /* New App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "New App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC55F1F61BA98B5D006C987C /* PublishingTestApp.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PublishingTestApp.plist; sourceTree = "<group>"; };
 		EC55F1F71BA98B5D006C987C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		EC55F1F91BA98B5D006C987C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 		EC55F1F31BA98B5D006C987C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EC55F1F21BA98B5D006C987C /* Test1.app */,
+				EC55F1F21BA98B5D006C987C /* New App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -142,9 +142,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		EC55F1F11BA98B5D006C987C /* publishingTestApp */ = {
+		EC55F1F11BA98B5D006C987C /* PublishingTestApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EC55F2151BA98B5D006C987C /* Build configuration list for PBXNativeTarget "publishingTestApp" */;
+			buildConfigurationList = EC55F2151BA98B5D006C987C /* Build configuration list for PBXNativeTarget "PublishingTestApp" */;
 			buildPhases = (
 				3855BDA71C5E2C4000E2992C /* Copy Target Files */,
 				9AB17039169AE66E9019DBB0 /* Check Pods Manifest.lock */,
@@ -158,9 +158,9 @@
 			);
 			dependencies = (
 			);
-			name = publishingTestApp;
+			name = PublishingTestApp;
 			productName = PublishingTestApp;
-			productReference = EC55F1F21BA98B5D006C987C /* Test1.app */;
+			productReference = EC55F1F21BA98B5D006C987C /* New App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -175,6 +175,11 @@
 					EC55F1F11BA98B5D006C987C = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = P2WQ65BAA8;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -191,7 +196,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EC55F1F11BA98B5D006C987C /* publishingTestApp */,
+				EC55F1F11BA98B5D006C987C /* PublishingTestApp */,
 			);
 		};
 /* End PBXProject section */
@@ -226,7 +231,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo $TARGET_NAME";
+			shellScript = "cd \"$SRCROOT/$TARGET_NAME\"\nfind . -type d \\! -name \".\" -exec ditto -v {}/ \"$SRCROOT/$PROJECT_NAME/{}\"  \\;";
+			showEnvVarsInLog = 0;
 		};
 		8FF5CC240DE04BAE1705F65A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -394,12 +400,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 94B124F8F69F2A22737CB121 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)";
+				CODE_SIGN_IDENTITY = "";
 				INFOPLIST_FILE = "$(SRCROOT)/PublishingTestApp/PublishingTestApp.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PY.testSpaceshipApp;
-				PRODUCT_NAME = "New Target";
-				PROVISIONING_PROFILE = "aacd4ab6-c32e-4e96-a66f-e73ad414fb66";
+				PRODUCT_NAME = "New App";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -407,12 +413,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = CF15EB93E4252FF570A3A0B0 /* Pods.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)";
+				CODE_SIGN_IDENTITY = "";
 				INFOPLIST_FILE = "$(SRCROOT)/PublishingTestApp/PublishingTestApp.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = PY.testSpaceshipApp;
-				PRODUCT_NAME = "New Target";
-				PROVISIONING_PROFILE = "aacd4ab6-c32e-4e96-a66f-e73ad414fb66";
+				PRODUCT_NAME = "New App";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -428,7 +434,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EC55F2151BA98B5D006C987C /* Build configuration list for PBXNativeTarget "publishingTestApp" */ = {
+		EC55F2151BA98B5D006C987C /* Build configuration list for PBXNativeTarget "PublishingTestApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EC55F2161BA98B5D006C987C /* Debug */,

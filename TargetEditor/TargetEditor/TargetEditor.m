@@ -44,10 +44,13 @@
 //        NSLog(@"%@", [config valueForKey:@"CODE_SIGN_IDENTITY"]);
 //    }
     
-    XCTarget* target = [project targetWithName:@"publishingTestApp"];
+    NSString* rootProjectPath = [projFile stringByDeletingPathExtension];
+    NSString* projectName = [rootProjectPath lastPathComponent];
+
+    XCTarget* target = [project targetWithName:projectName];
     
     XCTarget* duplicatedTarget = [target duplicateWithTargetName:newTargetName productName:newTargetName];
-    [duplicatedTarget setProductName:newTargetName];
+
     XCProjectBuildConfig* debugTargetConfig = [duplicatedTarget configurationWithName:@"Debug"];
     XCProjectBuildConfig* releaseTargetConfig = [duplicatedTarget configurationWithName:@"Release"];
     
@@ -60,8 +63,6 @@
     NSString* baseInfoFileName = (NSString*)[debugTargetConfig valueForKey:@"INFOPLIST_FILE"];
     baseInfoFileName = [baseInfoFileName lastPathComponent];
 
-    NSString* rootProjectPath = [projFile stringByDeletingPathExtension];
-
     NSError* error;
     
     NSString* newTargetFilesPath = [[rootProjectPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newTargetName];
@@ -70,10 +71,23 @@
     NSString* groupPath = newTargetName;
     
     NSString* infoFile = [NSString stringWithContentsOfFile:[rootProjectPath stringByAppendingPathComponent:baseInfoFileName] encoding:NSUTF8StringEncoding error:&error ];
+    
+    /*
+    NSString* entitelmentsTemplateFileName = [rootProjectPath stringByAppendingPathComponent:@"$template$.entitlements"];
+    NSString* entitelmentsFileSource = [NSString stringWithContentsOfFile:entitelmentsTemplateFileName encoding:NSUTF8StringEncoding error:&error];
+    NSString* entitelmentsFileName = [newTargetName stringByAppendingString:@".entitlements"];
+    XCSourceFileDefinition *entitelmentsFileDefinition = [XCSourceFileDefinition sourceDefinitionWithName:entitelmentsFileName text:entitelmentsFileSource type:PropertyList];
+    
+    NSString *entitelmentsFileKey = [[XCKeyBuilder forItemNamed:entitelmentsFileName] build];
+    XCSourceFile *entitelmentsSourceFile = [XCSourceFile sourceFileWithProject:project key:entitelmentsFileKey type:PropertyList name:entitelmentsFileName sourceTree:@"/" path:[newTargetFilesPath stringByAppendingPathComponent:entitelmentsFileName]];
+    NSLog(@"%@", [entitelmentsSourceFile description]);
+*/
+    
+    XCGroup *newGroup = [[project rootGroup] addGroupWithPath:groupPath];
+    
     NSString* infoFileName = [newTargetName stringByAppendingString:@".plist"];
     XCSourceFileDefinition *infoFileDefinition = [XCSourceFileDefinition sourceDefinitionWithName:infoFileName text:infoFile type:PropertyList];
     
-    XCGroup *newGroup = [[project rootGroup] addGroupWithPath:groupPath];
     [newGroup addSourceFile:infoFileDefinition];
     
     NSString* infoRelativePath = [[@"$(SRCROOT)" stringByAppendingPathComponent:newTargetName] stringByAppendingPathComponent:infoFileName];
@@ -114,23 +128,4 @@
     return [NSString stringWithCString:returnValue encoding:NSUTF8StringEncoding];
 }
 
-
-/*
- int pid = [[NSProcessInfo processInfo] processIdentifier];
- NSPipe *pipe = [NSPipe pipe];
- NSFileHandle *file = pipe.fileHandleForReading;
- 
- NSTask *task = [[NSTask alloc] init];
- task.launchPath = @"/usr/bin/grep";
- task.arguments = @[@"foo", @"bar.txt"];
- task.standardOutput = pipe;
- 
- [task launch];
- 
- NSData *data = [file readDataToEndOfFile];
- [file closeFile];
- 
- NSString *grepOutput = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
- NSLog (@"grep returned:\n%@", grepOutput);
- */
 @end
