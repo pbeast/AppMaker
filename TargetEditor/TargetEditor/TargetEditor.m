@@ -11,23 +11,28 @@
 
 @interface TargetEditor()
 {
-    NSArray* arguments;
+    GBSettings* _settings;
 }
 
 @end
 
 @implementation TargetEditor
 
-- (instancetype)initWithArgs:(NSArray*)args{
+-(instancetype)initWithSettings:(GBSettings*)settings{
     self = [super init];
     if (self) {
-        self->arguments = args;
+        self->_settings = settings;
     }
     return self;
 }
 
--(void)createNewTarget:(NSString*)newTargetName forProject:(NSString*)projectPath{
-    NSString* projFile = [self resolvePath:projectPath];
+-(void)editTarget{
+    
+}
+
+-(void)createNewTarget{
+    NSString* projFile = [self resolvePath:[_settings objectForKey:@"project"]];
+    NSString* newTargetName = [_settings objectForKey:@"target"];
     
     XCProject* project = [[XCProject alloc] initWithFilePath:projFile];
         
@@ -43,8 +48,8 @@
     
     XCTarget* duplicatedTarget = [target duplicateWithTargetName:newTargetName productName:newTargetName];
     [duplicatedTarget setProductName:newTargetName];
-    [duplicatedTarget setScriptingProperties:@{}];
-    XCProjectBuildConfig* duplicatedTargetConfig = [duplicatedTarget configurationWithName:@"Debug"];
+    XCProjectBuildConfig* debugTargetConfig = [duplicatedTarget configurationWithName:@"Debug"];
+    XCProjectBuildConfig* releaseTargetConfig = [duplicatedTarget configurationWithName:@"Release"];
     
 //    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PROVISIONING_PROFILE"]);
 //    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"CODE_SIGN_IDENTITY"]);
@@ -52,7 +57,7 @@
 //    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PROJECT_NAME"]);
 //    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PRODUCT_BUNDLE_IDENTIFIER"]);
     
-    NSString* baseInfoFileName = (NSString*)[duplicatedTargetConfig valueForKey:@"INFOPLIST_FILE"];
+    NSString* baseInfoFileName = (NSString*)[debugTargetConfig valueForKey:@"INFOPLIST_FILE"];
     baseInfoFileName = [baseInfoFileName lastPathComponent];
 
     NSString* rootProjectPath = [projFile stringByDeletingPathExtension];
@@ -68,16 +73,27 @@
     NSString* infoFileName = [newTargetName stringByAppendingString:@".plist"];
     XCSourceFileDefinition *infoFileDefinition = [XCSourceFileDefinition sourceDefinitionWithName:infoFileName text:infoFile type:PropertyList];
     
-   XCGroup *newGroup = [[project rootGroup] addGroupWithPath:groupPath];
+    XCGroup *newGroup = [[project rootGroup] addGroupWithPath:groupPath];
     [newGroup addSourceFile:infoFileDefinition];
-//    NSLog(@"New %@", [newGroup description]);
     
     NSString* infoRelativePath = [[@"$(SRCROOT)" stringByAppendingPathComponent:newTargetName] stringByAppendingPathComponent:infoFileName];
-    [duplicatedTargetConfig addOrReplaceSetting:infoRelativePath forKey:@"INFOPLIST_FILE"];
+    [debugTargetConfig addOrReplaceSetting:infoRelativePath forKey:@"INFOPLIST_FILE"];
+    [releaseTargetConfig addOrReplaceSetting:infoRelativePath forKey:@"INFOPLIST_FILE"];
 
-    NSString *bundleId = [NSString stringWithFormat:@"py.apps.%@", [[newTargetName capitalizedString] stringByReplacingOccurrencesOfString:@" " withString:@""]];
+    if ([_settings objectForKey:@"bundle-id"] != nil){
+        [debugTargetConfig addOrReplaceSetting:[_settings objectForKey:@"bundle-id"] forKey:@"PRODUCT_BUNDLE_IDENTIFIER"];
+        [releaseTargetConfig addOrReplaceSetting:[_settings objectForKey:@"bundle-id"] forKey:@"PRODUCT_BUNDLE_IDENTIFIER"];
+    }
     
-    [duplicatedTargetConfig addOrReplaceSetting:bundleId forKey:@"PRODUCT_BUNDLE_IDENTIFIER"];
+    if ([_settings objectForKey:@"code-sign-dev"]!= nil)
+        [debugTargetConfig addOrReplaceSetting:[_settings objectForKey:@"code-sign-dev"] forKey:@"CODE_SIGN_IDENTITY"];
+    if ([_settings objectForKey:@"code-sign-prod"]!= nil)
+        [releaseTargetConfig addOrReplaceSetting:[_settings objectForKey:@"code-sign-prod"] forKey:@"CODE_SIGN_IDENTITY"];
+    
+    if ([_settings objectForKey:@"provision-dev"]!= nil)
+        [debugTargetConfig addOrReplaceSetting:[_settings objectForKey:@"provision-dev"] forKey:@"PROVISIONING_PROFILE"];
+    if ([_settings objectForKey:@"provision-prod"]!= nil)
+        [releaseTargetConfig addOrReplaceSetting:[_settings objectForKey:@"provision-prod"] forKey:@"PROVISIONING_PROFILE"];
     
     [project save];
 }

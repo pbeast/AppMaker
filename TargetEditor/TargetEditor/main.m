@@ -19,13 +19,26 @@ int main(int argc, const char * argv[]) {
         [options registerOption:'p' long:@"project" description:@"Project to add or configure target" flags:GBOptionRequiredValue];
         [options registerOption:'b' long:@"target" description:@"Target name to add or configure" flags:GBOptionRequiredValue];
         [options registerOption:'e' long:@"edit" description:@"Edit target insted of creating a new one" flags:GBOptionNoValue];
+        [options registerOption:0 long:@"provision-dev" description:@"Development provisioning profile" flags:GBOptionOptionalValue];
+        [options registerOption:0 long:@"provision-prod" description:@"Production provisioning profile" flags:GBOptionOptionalValue];
+        [options registerOption:0 long:@"code-sign-dev" description:@"Development code signing identity" flags:GBOptionOptionalValue];
+        [options registerOption:0 long:@"code-sign-prod" description:@"Production code signing identity" flags:GBOptionOptionalValue];
+        [options registerOption:'b' long:@"bundle-id" description:@"Bundle identifier" flags:GBOptionOptionalValue];
         [options registerOption:'h' long:@"help" description:@"Prints help" flags:GBOptionNoValue];
 
         GBCommandLineParser *parser = [[GBCommandLineParser alloc] init];
         [parser registerOption:@"project" shortcut:'p' requirement:GBValueRequired];
         [parser registerOption:@"target" shortcut:'t' requirement:GBValueRequired];
+        [parser registerOption:@"provision-dev" shortcut:0 requirement:GBValueOptional];
+        [parser registerOption:@"provision-prod" shortcut:0 requirement:GBValueOptional];
+        [parser registerOption:@"code-sign-dev" shortcut:0 requirement:GBValueOptional];
+        [parser registerOption:@"code-sign-prod" shortcut:0 requirement:GBValueOptional];
+        [parser registerOption:@"bundle-id" shortcut:'b' requirement:GBValueOptional];
+
         [parser registerOption:@"edit" shortcut:'e' requirement:GBValueNone];
         [parser registerOption:@"help" shortcut:'h' requirement:GBValueNone];
+        
+        GBSettings *settings = [GBSettings settingsWithName:@"CmdLine" parent:nil];
         
         // Parse command line
         [parser parseOptionsWithArguments:(char **)argv count:argc block:^(GBParseFlags flags, NSString *option, id value, BOOL *stop) {
@@ -39,10 +52,11 @@ int main(int argc, const char * argv[]) {
                 case GBParseFlagOption:
                     if ([option isEqualToString:@"help"])
                         printHelp = YES;
-                    // do something with 'option' and its 'value'
+                    
+                    [settings setObject:value forKey:option];
                     break;
                 case GBParseFlagArgument:
-                    // do something with argument 'value'
+                    [settings addArgument:value];
                     break;
             }
         }];
@@ -51,14 +65,25 @@ int main(int argc, const char * argv[]) {
         NSString* target = [parser valueForOption:@"target"];
         NSNumber* isEdit = [parser valueForOption:@"edit"];
 
+        
+//        NSLog(@"Code Sign Dev: %@", [settings objectForKey:@"code-sign-dev"]);
+//        NSLog(@"Code Sign Prod: %@", [settings objectForKey:@"code-sign-prod"]);
+//        NSLog(@"Prov. Profile Dev: %@", [settings objectForKey:@"provision-dev"]);
+//        NSLog(@"Prov. Profile Prod: %@", [settings objectForKey:@"provision-prod"]);
+//        NSLog(@"Bundle Id: %@", [settings objectForKey:@"bundle-id"]);
+//        
+//        return 0;
+        
         if (printHelp || project == nil || target == nil) {
             [options printHelp];
             return 0;
         }
 
-        TargetEditor * maker = [[TargetEditor alloc] init];
+        TargetEditor * maker = [[TargetEditor alloc] initWithSettings:settings];
         if (isEdit == nil || [isEdit boolValue] == NO)
-            [maker createNewTarget:target forProject:project];
+            [maker createNewTarget];
+        else
+            [maker editTarget];
     }
     
     return 0;

@@ -7,11 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GBCli/GBCli.h>
 
 @interface TargetEditor : NSObject
 
--(instancetype)initWithArgs:(NSArray*)args;
+-(instancetype)initWithSettings:(GBSettings*)settings;
 
--(void)createNewTarget:(NSString*)newTargetName forProject:(NSString*)projectPath;
+-(void)createNewTarget;
+-(void)editTarget;
 
 @end

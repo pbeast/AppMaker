@@ -3,7 +3,7 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
-target 'NewTarget' do
+target 'TargetEditor' do
 	pod 'XcodeEditor'
     pod 'GBCli'
 end
