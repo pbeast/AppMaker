@@ -35,14 +35,6 @@
     NSString* newTargetName = [_settings objectForKey:@"target"];
     
     XCProject* project = [[XCProject alloc] initWithFilePath:projFile];
-        
-//    for (XCTarget* target in [project targets]) {
-//        NSLog(@"%@", [target name]);
-//        XCProjectBuildConfig* config = [target configurationWithName:@"Debug"];
-//        
-//        NSLog(@"%@", [config valueForKey:@"PROVISIONING_PROFILE"]);
-//        NSLog(@"%@", [config valueForKey:@"CODE_SIGN_IDENTITY"]);
-//    }
     
     NSString* rootProjectPath = [projFile stringByDeletingPathExtension];
     NSString* projectName = [rootProjectPath lastPathComponent];
@@ -53,12 +45,6 @@
 
     XCProjectBuildConfig* debugTargetConfig = [duplicatedTarget configurationWithName:@"Debug"];
     XCProjectBuildConfig* releaseTargetConfig = [duplicatedTarget configurationWithName:@"Release"];
-    
-//    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PROVISIONING_PROFILE"]);
-//    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"CODE_SIGN_IDENTITY"]);
-//    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"INFOPLIST_FILE"]);
-//    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PROJECT_NAME"]);
-//    NSLog(@"%@", [duplicatedTargetConfig valueForKey:@"PRODUCT_BUNDLE_IDENTIFIER"]);
     
     NSString* baseInfoFileName = (NSString*)[debugTargetConfig valueForKey:@"INFOPLIST_FILE"];
     baseInfoFileName = [baseInfoFileName lastPathComponent];
@@ -110,6 +96,14 @@
         [releaseTargetConfig addOrReplaceSetting:[_settings objectForKey:@"provision-prod"] forKey:@"PROVISIONING_PROFILE"];
     
     [project save];
+    
+    NSString* podFileName = [[rootProjectPath stringByDeletingLastPathComponent] stringByAppendingPathComponent:@"Podfile"];
+    error = nil;
+    NSString* podFile = [NSString stringWithContentsOfFile:podFileName encoding:NSUTF8StringEncoding error:&error];
+    if (error == nil){
+        podFile = [podFile stringByAppendingString:[NSString stringWithFormat:@"\n\ntarget '%@' do\nend", newTargetName]];
+        [podFile writeToFile:podFileName atomically:NO encoding:NSUTF8StringEncoding error:&error];
+    }
 }
 
 - (NSString *)resolvePath:(NSString *)path {

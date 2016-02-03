@@ -4,10 +4,10 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>New App.xcscheme</key>
+		<key>New Target.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>4</integer>
 		</dict>
 		<key>PublishingTestApp.xcscheme_^#shared#^_</key>
 		<dict>
@@ -27,12 +27,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>418379CA345C98E5AEAB353B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>765448845D00C579898E6034</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>80F7F342F37C038C77C36C14</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>91E565069400A3F7971C1E9E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -48,6 +58,11 @@
 			<true/>
 		</dict>
 		<key>C4C26DD3E8719FA3D022355F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CFE08098E22603B6F99D5788</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -73,6 +88,11 @@
 			<true/>
 		</dict>
 		<key>EC55F20A1BA98B5D006C987C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FFB244037A0073BF044A8290</key>
 		<dict>
 			<key>primary</key>
 			<true/>
