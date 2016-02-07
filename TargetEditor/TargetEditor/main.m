@@ -17,12 +17,14 @@ int main(int argc, const char * argv[]) {
         
         GBOptionsHelper *options = [[GBOptionsHelper alloc] init];
         [options registerOption:'p' long:@"project" description:@"Project to add or configure target" flags:GBOptionRequiredValue];
-        [options registerOption:'b' long:@"target" description:@"Target name to add or configure" flags:GBOptionRequiredValue];
+        [options registerOption:'t' long:@"target" description:@"Target name to add or configure" flags:GBOptionRequiredValue];
         [options registerOption:'e' long:@"edit" description:@"Edit target insted of creating a new one" flags:GBOptionNoValue];
         [options registerOption:0 long:@"provision-dev" description:@"Development provisioning profile" flags:GBOptionOptionalValue];
         [options registerOption:0 long:@"provision-prod" description:@"Production provisioning profile" flags:GBOptionOptionalValue];
         [options registerOption:0 long:@"code-sign-dev" description:@"Development code signing identity" flags:GBOptionOptionalValue];
         [options registerOption:0 long:@"code-sign-prod" description:@"Production code signing identity" flags:GBOptionOptionalValue];
+        [options registerOption:0 long:@"automatic-profiles" description:@"Try to find provisioning profiles automatically" flags:GBOptionNoValue];
+        //[options registerOption:'v' long:@"version-up" description:@"Raise version" flags:GBOptionNoValue];
         [options registerOption:'b' long:@"bundle-id" description:@"Bundle identifier" flags:GBOptionOptionalValue];
         [options registerOption:'h' long:@"help" description:@"Prints help" flags:GBOptionNoValue];
 
@@ -33,6 +35,8 @@ int main(int argc, const char * argv[]) {
         [parser registerOption:@"provision-prod" shortcut:0 requirement:GBValueOptional];
         [parser registerOption:@"code-sign-dev" shortcut:0 requirement:GBValueOptional];
         [parser registerOption:@"code-sign-prod" shortcut:0 requirement:GBValueOptional];
+        [parser registerOption:@"automatic-profiles" shortcut:0 requirement:GBValueNone];
+        //[parser registerOption:@"version-up" shortcut:'v' requirement:GBValueNone];
         [parser registerOption:@"bundle-id" shortcut:'b' requirement:GBValueOptional];
 
         [parser registerOption:@"edit" shortcut:'e' requirement:GBValueNone];

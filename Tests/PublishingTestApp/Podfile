@@ -8,3 +8,6 @@ end
 
 target 'New Target' do
 end
+
+target 'New Target' do
+end

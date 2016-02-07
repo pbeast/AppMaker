@@ -10,6 +10,7 @@
 		30D82DA9DECF75E137F50090 /* libPods-TargetEditor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D75E9017E7BB92765C1B131E /* libPods-TargetEditor.a */; };
 		3810375A1C5ED01300310075 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3851DB361C5E0FE5007F0BFA /* main.m */; };
 		386AE9DA1C5ECFA500A145DD /* TargetEditor.m in Sources */ = {isa = PBXBuildFile; fileRef = 380C48D31C5E110000AC1F3F /* TargetEditor.m */; };
+		EC1A79F71C675FE90054799C /* ProvisioningProfileBean.m in Sources */ = {isa = PBXBuildFile; fileRef = EC1A79F61C675FE90054799C /* ProvisioningProfileBean.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -33,6 +34,8 @@
 		4586F9485959D2515DACF499 /* Pods-TargetEditor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TargetEditor.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TargetEditor/Pods-TargetEditor.debug.xcconfig"; sourceTree = "<group>"; };
 		B50ED75A95AD5088FF3ED85C /* Pods-TargetEditor.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TargetEditor.release.xcconfig"; path = "Pods/Target Support Files/Pods-TargetEditor/Pods-TargetEditor.release.xcconfig"; sourceTree = "<group>"; };
 		D75E9017E7BB92765C1B131E /* libPods-TargetEditor.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TargetEditor.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC1A79F51C675FE90054799C /* ProvisioningProfileBean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProvisioningProfileBean.h; sourceTree = "<group>"; };
+		EC1A79F61C675FE90054799C /* ProvisioningProfileBean.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProvisioningProfileBean.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 		3851DB351C5E0FE5007F0BFA /* TargetEditor */ = {
 			isa = PBXGroup;
 			children = (
+				EC1A79F51C675FE90054799C /* ProvisioningProfileBean.h */,
+				EC1A79F61C675FE90054799C /* ProvisioningProfileBean.m */,
 				3851DB361C5E0FE5007F0BFA /* main.m */,
 				380C48D21C5E110000AC1F3F /* TargetEditor.h */,
 				380C48D31C5E110000AC1F3F /* TargetEditor.m */,
@@ -184,6 +189,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1A79F71C675FE90054799C /* ProvisioningProfileBean.m in Sources */,
 				3810375A1C5ED01300310075 /* main.m in Sources */,
 				386AE9DA1C5ECFA500A145DD /* TargetEditor.m in Sources */,
 			);
