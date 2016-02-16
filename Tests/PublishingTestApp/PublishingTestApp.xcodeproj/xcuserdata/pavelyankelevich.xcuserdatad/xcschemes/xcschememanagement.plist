@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>Ha Ha.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>PublishingTestApp.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -13,6 +18,11 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>13E1A0CE90CA1741983C2F0C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>14D1C58FA24CE1F20AA4EE86</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -58,6 +68,11 @@
 			<true/>
 		</dict>
 		<key>C4C26DD3E8719FA3D022355F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CC9B985549E8EA0D611B5F1A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
