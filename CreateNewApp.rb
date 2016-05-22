@@ -114,11 +114,11 @@ puts "Installing Profiles"
 cmd = `cp '#{devProfileFileName}' '#{PROFILES_LOCATION}/#{profile.uuid}.mobileprovision'`
 cmd = `cp '#{productionProfileFileName}' '#{PROFILES_LOCATION}/#{productionProfile.uuid}.mobileprovision'`
 
-puts "Configuring Project"
-cmdText = "TargetEditor -p '#{PROJECT_FILE}' -t '#{appName}' -b #{app_id} --provision-dev '#{profile.uuid}' --provision-prod '#{productionProfile.uuid}' --code-sign-dev '#{CODE_SIGN_DEV}' --code-sign-prod '#{CODE_SIGN_PROD}'"
-puts cmdText
-cmd = `#{cmdText}`
+# puts "Configuring Project"
+# cmdText = "TargetEditor -p '#{PROJECT_FILE}' -t '#{appName}' -b #{app_id} --provision-dev '#{profile.uuid}' --provision-prod '#{productionProfile.uuid}' --code-sign-dev '#{CODE_SIGN_DEV}' --code-sign-prod '#{CODE_SIGN_PROD}'"
+# puts cmdText
+# cmd = `#{cmdText}`
 
-cmd = `open #{WORKSPACE_FILE}`
+# cmd = `open #{WORKSPACE_FILE}`
 
 #/Users/pbeast/Library/MobileDevice/Provisioning\ Profiles
