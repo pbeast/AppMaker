@@ -14,8 +14,8 @@ def camel_case(str)
 end
 
 PROFILES_LOCATION = File::expand_path("~/Library/MobileDevice/Provisioning\ Profiles")
-PROJECT_FILE = "/Users/pavelyankelevich/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcodeproj"
-WORKSPACE_FILE = "/Users/pavelyankelevich/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcworkspace"
+PROJECT_FILE = File::expand_path("~/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcodeproj")
+WORKSPACE_FILE = File::expand_path("~/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcworkspace")
 CODE_SIGN_DEV = "iPhone Developer: Pavel Yankelevich (UCERH6TMLJ)"
 CODE_SIGN_PROD = "iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)"
 
@@ -37,7 +37,7 @@ client = Spaceship.login(AppMakerConfig::DEV_USER, AppMakerConfig::DEV_PASSWORD)
 puts "Logged in"
 #Spaceship.select_team
 
-client.team_id = 'P2WQ65BAA8'
+  
 #puts "Team Selected: #{client.team_information.name}"
 
 #Spaceship.app.all.collect do |app|
