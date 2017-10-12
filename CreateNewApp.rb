@@ -14,8 +14,8 @@ def camel_case(str)
 end
 
 PROFILES_LOCATION = File::expand_path("~/Library/MobileDevice/Provisioning\ Profiles")
-PROJECT_FILE = "/Users/pavelyankelevich/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcodeproj"
-WORKSPACE_FILE = "/Users/pavelyankelevich/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcworkspace"
+PROJECT_FILE = File::expand_path("~/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcodeproj")
+WORKSPACE_FILE = File::expand_path("~/Work/AppMaker/Tests/PublishingTestApp/PublishingTestApp.xcworkspace")
 CODE_SIGN_DEV = "iPhone Developer: Pavel Yankelevich (UCERH6TMLJ)"
 CODE_SIGN_PROD = "iPhone Distribution: Mobitti Ltd. (P2WQ65BAA8)"
 
@@ -37,7 +37,7 @@ client = Spaceship.login(AppMakerConfig::DEV_USER, AppMakerConfig::DEV_PASSWORD)
 puts "Logged in"
 #Spaceship.select_team
 
-client.team_id = 'P2WQ65BAA8'
+  
 #puts "Team Selected: #{client.team_information.name}"
 
 #Spaceship.app.all.collect do |app|
@@ -114,11 +114,11 @@ puts "Installing Profiles"
 cmd = `cp '#{devProfileFileName}' '#{PROFILES_LOCATION}/#{profile.uuid}.mobileprovision'`
 cmd = `cp '#{productionProfileFileName}' '#{PROFILES_LOCATION}/#{productionProfile.uuid}.mobileprovision'`
 
-puts "Configuring Project"
-cmdText = "TargetEditor -p '#{PROJECT_FILE}' -t '#{appName}' -b #{app_id} --provision-dev '#{profile.uuid}' --provision-prod '#{productionProfile.uuid}' --code-sign-dev '#{CODE_SIGN_DEV}' --code-sign-prod '#{CODE_SIGN_PROD}'"
-puts cmdText
-cmd = `#{cmdText}`
+# puts "Configuring Project"
+# cmdText = "TargetEditor -p '#{PROJECT_FILE}' -t '#{appName}' -b #{app_id} --provision-dev '#{profile.uuid}' --provision-prod '#{productionProfile.uuid}' --code-sign-dev '#{CODE_SIGN_DEV}' --code-sign-prod '#{CODE_SIGN_PROD}'"
+# puts cmdText
+# cmd = `#{cmdText}`
 
-cmd = `open #{WORKSPACE_FILE}`
+# cmd = `open #{WORKSPACE_FILE}`
 
 #/Users/pbeast/Library/MobileDevice/Provisioning\ Profiles
