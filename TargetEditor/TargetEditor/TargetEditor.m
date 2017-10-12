@@ -112,8 +112,13 @@
     NSString* rootProjectPath = [projFile stringByDeletingPathExtension];
     NSString* projectName = [rootProjectPath lastPathComponent];
 
-    XCTarget* target = [project targetWithName:projectName];
+    NSString* baseTarget = [_settings objectForKey:@"base-target"] != nil ? [_settings objectForKey:@"base-target"] : projectName;
     
+    XCTarget* target = [project targetWithName:baseTarget];
+    if (target == nil){
+        NSLog(@"Template target %@ not found", projectName);
+        return;
+    }
     XCTarget* duplicatedTarget = [target duplicateWithTargetName:newTargetName productName:newTargetName];
 
     XCProjectBuildConfig* debugTargetConfig = [duplicatedTarget configurationWithName:@"Debug"];

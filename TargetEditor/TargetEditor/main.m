@@ -18,6 +18,7 @@ int main(int argc, const char * argv[]) {
         GBOptionsHelper *options = [[GBOptionsHelper alloc] init];
         [options registerOption:'p' long:@"project" description:@"Project to add or configure target" flags:GBOptionRequiredValue];
         [options registerOption:'t' long:@"target" description:@"Target name to add or configure" flags:GBOptionRequiredValue];
+        [options registerOption:'a' long:@"base-target" description:@"Target name to use as a template" flags:GBOptionRequiredValue];
         [options registerOption:'e' long:@"edit" description:@"Edit target insted of creating a new one" flags:GBOptionNoValue];
         [options registerOption:0 long:@"provision-dev" description:@"Development provisioning profile" flags:GBOptionOptionalValue];
         [options registerOption:0 long:@"provision-prod" description:@"Production provisioning profile" flags:GBOptionOptionalValue];
@@ -31,6 +32,7 @@ int main(int argc, const char * argv[]) {
         GBCommandLineParser *parser = [[GBCommandLineParser alloc] init];
         [parser registerOption:@"project" shortcut:'p' requirement:GBValueRequired];
         [parser registerOption:@"target" shortcut:'t' requirement:GBValueRequired];
+        [parser registerOption:@"base-target" shortcut:'a' requirement:GBValueRequired];
         [parser registerOption:@"provision-dev" shortcut:0 requirement:GBValueOptional];
         [parser registerOption:@"provision-prod" shortcut:0 requirement:GBValueOptional];
         [parser registerOption:@"code-sign-dev" shortcut:0 requirement:GBValueOptional];
